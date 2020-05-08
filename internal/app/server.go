@@ -34,7 +34,7 @@ func (h handler) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 		}
 	}()
 
-	filepath := Lookup(RootDir, req)
+	filepath := Lookup(RootDir, req.Method, req.URL)
 
 	// if file not exist
 	if _, err = os.Stat(filepath); os.IsNotExist(err) {
