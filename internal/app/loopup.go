@@ -9,10 +9,6 @@ import (
 	"strings"
 )
 
-func getFilename(method string, urlName string) string {
-	return urlName + "." + strings.ToLower(method) + ".json"
-}
-
 func NameToRegExp(name string) *regexp.Regexp {
 
 	paramsRegExp := regexp.MustCompile("\\[[\\w\\d-]+\\]")
@@ -50,7 +46,7 @@ func Lookup(rootDir string, method string, u *url.URL) *string {
 
 		// If it is the last element, then the file should have a extension name
 		if isLastElement {
-			filepath = getFilename(method, filepath)
+			filepath = filepath + "." + method + ".json"
 		} else {
 			currentDir = path.Join(currentDir, p)
 		}

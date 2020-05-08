@@ -1,9 +1,0 @@
-{
-  "status": 400,
-  "body": {
-    "username": "axetroy"
-  },
-  "headers": {
-    "X-Token": ["xxx-xxx-xxxx"]
-  }
-}
