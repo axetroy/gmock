@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"path"
 	"time"
 )
 
@@ -85,6 +86,12 @@ func (h handler) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 }
 
 func Server(addr string, targetDir string) error {
+	// if root path is relative
+	if !path.IsAbs(targetDir) {
+		cwd, _ := os.Getwd()
+		targetDir = path.Join(cwd, RootDir)
+	}
+
 	RootDir = targetDir
 
 	s := &http.Server{
@@ -95,6 +102,8 @@ func Server(addr string, targetDir string) error {
 		IdleTimeout:    60 * time.Second,
 		MaxHeaderBytes: 1 << 20, // 10M
 	}
+
+	log.Printf("Root Dir: %s", RootDir)
 
 	log.Printf("Listen on %s\n.", addr)
 
