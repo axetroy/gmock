@@ -37,14 +37,20 @@ func (h handler) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 
 	filepath := Lookup(RootDir, req.Method, req.URL)
 
-	// if file not exist
-	if _, err = os.Stat(filepath); os.IsNotExist(err) {
+	if filepath == nil {
 		statusCode = 404
 		err = errors.New(http.StatusText(http.StatusNotFound))
 		return
 	}
 
-	bytes, er := ioutil.ReadFile(filepath)
+	// if file not exist
+	if _, err = os.Stat(*filepath); os.IsNotExist(err) {
+		statusCode = 404
+		err = errors.New(http.StatusText(http.StatusNotFound))
+		return
+	}
+
+	bytes, er := ioutil.ReadFile(*filepath)
 
 	if er != nil {
 		statusCode = http.StatusInternalServerError
@@ -89,7 +95,7 @@ func Server(addr string, targetDir string) error {
 	// if root path is relative
 	if !path.IsAbs(targetDir) {
 		cwd, _ := os.Getwd()
-		targetDir = path.Join(cwd, RootDir)
+		targetDir = path.Join(cwd, targetDir)
 	}
 
 	RootDir = targetDir
