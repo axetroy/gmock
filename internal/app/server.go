@@ -2,8 +2,6 @@ package app
 
 import (
 	"encoding/json"
-	"errors"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
@@ -27,6 +25,7 @@ func (h handler) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 	var (
 		err        error
 		statusCode = 200
+		fileBytes  []byte
 	)
 
 	defer func() {
@@ -35,32 +34,13 @@ func (h handler) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 		}
 	}()
 
-	filepath := Lookup(RootDir, req.Method, req.URL)
-
-	if filepath == nil {
-		statusCode = 404
-		err = errors.New(http.StatusText(http.StatusNotFound))
-		return
-	}
-
-	// if file not exist
-	if _, err = os.Stat(*filepath); os.IsNotExist(err) {
-		statusCode = 404
-		err = errors.New(http.StatusText(http.StatusNotFound))
-		return
-	}
-
-	bytes, er := ioutil.ReadFile(*filepath)
-
-	if er != nil {
-		statusCode = http.StatusInternalServerError
-		err = er
+	if fileBytes, statusCode, err = Render(req); err != nil {
 		return
 	}
 
 	data := Schema{}
 
-	if er := json.Unmarshal(bytes, &data); err != nil {
+	if er := json.Unmarshal(fileBytes, &data); err != nil {
 		statusCode = http.StatusInternalServerError
 		err = er
 		return
