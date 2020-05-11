@@ -10,7 +10,7 @@ import (
 )
 
 func Render(req *http.Request) ([]byte, int, error) {
-	filepath := Lookup(RootDir, req.Method, req.URL)
+	filepath, routeParams := Lookup(RootDir, req.Method, req.URL)
 
 	if filepath == nil {
 		return nil, http.StatusNotFound, errors.New(http.StatusText(http.StatusNotFound))
@@ -36,8 +36,8 @@ func Render(req *http.Request) ([]byte, int, error) {
 	var buff bytes.Buffer
 
 	err = t.Execute(&buff, map[string]interface{}{
-		"Request": req,                 // The request object
-		"Params":  map[string]string{}, // The Params of Route
+		"Request": req,         // The request object
+		"Params":  routeParams, // The Params of Route
 	})
 
 	if err != nil {

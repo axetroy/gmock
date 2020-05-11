@@ -31,24 +31,54 @@ func MatchFileName(rule, name string) bool {
 	return NameToRegExp(rule).MatchString(name)
 }
 
-func Lookup(rootDir string, method string, u *url.URL) *string {
+func GetRealFileName(fileName string) string {
+	fileName = strings.TrimSuffix(fileName, ".json")
+	fileName = strings.TrimSuffix(fileName, path.Ext(fileName))
+
+	return fileName
+}
+
+func ExtractParamsFromFileName(fileName string, urlPath string) map[string]string {
+	fileName = GetRealFileName(fileName)
+
+	params := map[string]string{}
+
+	paramsRegExp := regexp.MustCompile("\\[([\\w\\d-]+)\\]")
+
+	matchers := paramsRegExp.FindAllStringSubmatch(fileName, -1)
+
+	if len(matchers) < 1 {
+		return params
+	}
+
+	for _, m := range matchers {
+		paramsName := m[1]
+		params[paramsName] = urlPath
+	}
+
+	return params
+}
+
+func Lookup(rootDir string, method string, u *url.URL) (*string, map[string]string) {
 	if u.Path == "/favicon.ico" {
-		return nil
+		return nil, nil
 	}
 	method = strings.ToLower(method)
 	pathArr := strings.Split(strings.TrimPrefix(u.Path, "/"), "/")
 
+	routeParams := map[string]string{}
+
 	currentDir := rootDir
 
-	for index, p := range pathArr {
-		filepath := path.Join(currentDir, p)
+	for index, pathName := range pathArr {
+		filepath := path.Join(currentDir, pathName)
 		isLastElement := len(pathArr)-1 == index
 
 		// If it is the last element, then the file should have a extension name
 		if isLastElement {
 			filepath = filepath + "." + method + ".json"
 		} else {
-			currentDir = path.Join(currentDir, p)
+			currentDir = path.Join(currentDir, pathName)
 		}
 
 		// if file not exist
@@ -63,24 +93,33 @@ func Lookup(rootDir string, method string, u *url.URL) *string {
 				f2, _ := os.Stat(path.Join(currentDir, f.Name()))
 
 				if !isLastElement && f2.IsDir() {
-					if MatchFileName(f.Name(), p) {
+					if MatchFileName(f.Name(), pathName) {
 						currentDir = path.Join(currentDir, f.Name())
+						paramName := strings.TrimPrefix(f.Name(), "[")
+						paramName = strings.TrimSuffix(paramName, "]")
+						routeParams[paramName] = pathName
 						break flatten
 					}
 				} else {
-					if MatchFileName(f.Name(), p+"."+method+".json") {
+					if MatchFileName(f.Name(), pathName+"."+method+".json") {
 						filepath = path.Join(currentDir, f.Name())
-						return &filepath
+
+						paramName := strings.TrimSuffix(f.Name(), ".json")
+						paramName = strings.TrimSuffix(paramName, "."+method)
+						paramName = strings.TrimPrefix(paramName, "[")
+						paramName = strings.TrimSuffix(paramName, "]")
+						routeParams[paramName] = pathName
+						return &filepath, routeParams
 					}
 				}
 
 			}
 		} else {
 			if !f.IsDir() {
-				return &filepath
+				return &filepath, routeParams
 			}
 		}
 	}
 
-	return nil
+	return nil, nil
 }

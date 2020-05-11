@@ -7,14 +7,14 @@ import (
 	"os"
 
 	"github.com/axetroy/gmock/internal/app"
+	"github.com/axetroy/gmock/internal/lib/daemon"
 )
 
 func main() {
 
 	port := flag.Int("port", 8080, "port of server")
 	host := flag.String("host", "localhost", "address of server")
-
-	//demon := flag.Bool("demon", false, "demon mod")
+	isDaemonMode := flag.Bool("daemon", false, "enable daemon mod")
 
 	flag.Parse()
 
@@ -32,7 +32,15 @@ func main() {
 
 	addr := fmt.Sprintf("%s:%d", *host, *port)
 
-	if err := app.Server(addr, targetDir); err != nil {
-		log.Fatal(err)
+	err := daemon.Start(func() error {
+		if err := app.Server(addr, targetDir); err != nil {
+			return err
+		}
+
+		return nil
+	}, *isDaemonMode)
+
+	if err != nil {
+		log.Fatalln(err)
 	}
 }

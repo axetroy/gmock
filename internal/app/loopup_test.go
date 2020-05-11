@@ -113,7 +113,7 @@ func TestLookup(t *testing.T) {
 
 	helloWorld := path.Join(cwd, "__test__", "hello_world", "hello.get.json")
 	paramsUserID := path.Join(cwd, "__test__", "params", "user", "[id].get.json")
-	paramsCardID := path.Join(cwd, "__test__", "params", "[card_id]", "detail.get.json")
+	paramsCardID := path.Join(cwd, "__test__", "params", "[zoo_id]", "detail.get.json")
 
 	type args struct {
 		rootDir string
@@ -121,9 +121,10 @@ func TestLookup(t *testing.T) {
 		u       *url.URL
 	}
 	tests := []struct {
-		name string
-		args args
-		want *string
+		name  string
+		args  args
+		want  *string
+		want1 map[string]string
 	}{
 		{
 			name: "basic",
@@ -132,31 +133,121 @@ func TestLookup(t *testing.T) {
 				method:  http.MethodGet,
 				u:       &url.URL{Path: "/hello"},
 			},
-			want: &helloWorld,
+			want:  &helloWorld,
+			want1: map[string]string{},
 		},
 		{
 			name: "params 1",
 			args: args{
 				rootDir: path.Join(cwd, "__test__", "params"),
 				method:  http.MethodGet,
-				u:       &url.URL{Path: "/user/user_id"},
+				u:       &url.URL{Path: "/user/root"},
 			},
 			want: &paramsUserID,
+			want1: map[string]string{
+				"id": "root",
+			},
 		},
 		{
 			name: "params 2",
 			args: args{
 				rootDir: path.Join(cwd, "__test__", "params"),
 				method:  http.MethodGet,
-				u:       &url.URL{Path: "/card_id/detail"},
+				u:       &url.URL{Path: "/my_zoo_id/detail"},
 			},
 			want: &paramsCardID,
+			want1: map[string]string{
+				"zoo_id": "my_zoo_id",
+			},
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := Lookup(tt.args.rootDir, tt.args.method, tt.args.u); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("Lookup() = %v, want %v", got, tt.want)
+			got, got1 := Lookup(tt.args.rootDir, tt.args.method, tt.args.u)
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("Lookup() got = %v, want %v", got, tt.want)
+			}
+			if !reflect.DeepEqual(got1, tt.want1) {
+				t.Errorf("Lookup() got1 = %v, want %v", got1, tt.want1)
+			}
+		})
+	}
+}
+
+func TestGetRealFileName(t *testing.T) {
+	type args struct {
+		fileName string
+	}
+	tests := []struct {
+		name string
+		args args
+		want string
+	}{
+		{
+			name: "basic",
+			args: args{fileName: "profile.get.json"},
+			want: "profile",
+		},
+		{
+			name: "basic params",
+			args: args{fileName: "[id].get.json"},
+			want: "[id]",
+		},
+		{
+			name: "basic & params",
+			args: args{fileName: "user_[id].get.json"},
+			want: "user_[id]",
+		},
+		{
+			name: "basic & multiple params",
+			args: args{fileName: "user_[id]_bank_[bank_name].get.json"},
+			want: "user_[id]_bank_[bank_name]",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := GetRealFileName(tt.args.fileName); got != tt.want {
+				t.Errorf("GetRealFileName() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestExtractParamsFromFileName(t *testing.T) {
+	type args struct {
+		fileName string
+		urlPath  string
+	}
+	tests := []struct {
+		name string
+		args args
+		want map[string]string
+	}{
+		{
+			name: "basic",
+			args: args{
+				fileName: "[id].get.json",
+				urlPath:  "123",
+			},
+			want: map[string]string{
+				"id": "123",
+			},
+		},
+		{
+			name: "basic",
+			args: args{
+				fileName: "[user_id].get.json",
+				urlPath:  "123",
+			},
+			want: map[string]string{
+				"user_id": "123",
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := ExtractParamsFromFileName(tt.args.fileName, tt.args.urlPath); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("ExtractParamsFromFileName() = %v, want %v", got, tt.want)
 			}
 		})
 	}
