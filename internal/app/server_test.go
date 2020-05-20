@@ -89,4 +89,18 @@ func TestServer(t *testing.T) {
 
 		assert.Equal(t, "/hello_id", string(body))
 	}
+
+	{
+		app.RootDir = path.Join(cwd, "__test__", "status_code")
+		mock := mocker.New(app.Handler{})
+
+		r := mock.Get("/error", nil, nil)
+
+		assert.Equal(t, http.StatusInternalServerError, r.Code)
+		body, err := ioutil.ReadAll(r.Body)
+
+		assert.Nil(t, err)
+
+		assert.Equal(t, "error", string(body))
+	}
 }
