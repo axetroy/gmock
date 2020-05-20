@@ -3,6 +3,7 @@ package app
 import (
 	"bytes"
 	"errors"
+	"github.com/axetroy/gmock/internal/app/function"
 	"io/ioutil"
 	"net/http"
 	"os"
@@ -29,7 +30,12 @@ func Render(req *http.Request) ([]byte, int, error) {
 
 	t := template.New(req.URL.Path)
 
-	if t, err = t.Parse(string(b)); err != nil {
+	if t, err = t.Funcs(template.FuncMap{
+		"FuncMakeSlice":     function.FuncMakeSlice,
+		"MakeSliceByLength": function.MakeSliceByLength,
+		"PlusInt":           function.PlusInt,
+		"MinusInt":          function.MinusInt,
+	}).Parse(string(b)); err != nil {
 		return nil, http.StatusInternalServerError, err
 	}
 

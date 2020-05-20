@@ -121,4 +121,22 @@ func TestServer(t *testing.T) {
 
 		assert.Equal(t, b, body)
 	}
+
+	{
+		app.RootDir = path.Join(cwd, "__test__", "loop_output")
+		mock := mocker.New(app.Handler{})
+
+		r := mock.Get("/function", nil, nil)
+
+		assert.Equal(t, http.StatusOK, r.Code)
+		body, err := ioutil.ReadAll(r.Body)
+
+		assert.Nil(t, err)
+
+		arr := []int{1, 2, 3}
+
+		b, _ := json.Marshal(arr)
+
+		assert.Equal(t, b, body)
+	}
 }

@@ -30,6 +30,7 @@ func (h Handler) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 
 	defer func() {
 		if err != nil {
+			res.WriteHeader(http.StatusInternalServerError)
 			_, _ = res.Write([]byte(err.Error()))
 		}
 	}()
