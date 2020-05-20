@@ -59,6 +59,7 @@ func ExtractParamsFromFileName(fileName string, urlPath string) map[string]strin
 	return params
 }
 
+// Lookup router file and params context
 func Lookup(rootDir string, method string, u *url.URL) (*string, map[string]string) {
 	if u.Path == "/favicon.ico" {
 		return nil, nil

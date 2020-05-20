@@ -12,7 +12,7 @@ import (
 // server's root dir
 var RootDir string
 
-type handler struct {
+type Handler struct {
 }
 
 type Schema struct {
@@ -21,7 +21,7 @@ type Schema struct {
 	Headers *map[string][]string `json:"headers"` // 返回头
 }
 
-func (h handler) ServeHTTP(res http.ResponseWriter, req *http.Request) {
+func (h Handler) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 	var (
 		err        error
 		statusCode = 200
@@ -46,12 +46,16 @@ func (h handler) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	body, er := json.Marshal(data.Body)
+	var body []byte
 
-	if er != nil {
-		statusCode = http.StatusInternalServerError
-		err = er
-		return
+	if str, ok := data.Body.(string); ok {
+		body = []byte(str)
+	} else {
+		if b, err := json.Marshal(data.Body); err != nil {
+			statusCode = http.StatusInternalServerError
+		} else {
+			body = b
+		}
 	}
 
 	if data.Status != nil {
@@ -82,7 +86,7 @@ func Server(addr string, targetDir string) error {
 
 	s := &http.Server{
 		Addr:           addr,
-		Handler:        handler{},
+		Handler:        Handler{},
 		ReadTimeout:    15 * time.Second,
 		WriteTimeout:   15 * time.Second,
 		IdleTimeout:    60 * time.Second,
