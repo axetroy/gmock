@@ -31,6 +31,13 @@ jobs:
       - name: Build
         run: make build
 
+      - uses: actions/upload-artifact@v2
+        if: runner.os == 'macOS'
+        with:
+          name: release
+          path: ./bin
+
+
       # after success
       #      - name: Coverage
       #        if: startsWith(matrix.os, 'ubuntu')
@@ -45,6 +52,10 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/download-artifact@v2
+        with:
+          name: release
+
       - uses: softprops/action-gh-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
