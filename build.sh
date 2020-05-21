@@ -27,7 +27,7 @@ do
 
     echo building ${os_arch}
 
-    CGO_ENABLED=0 GOOS=${goos} GOARCH=${goarch} go build -mod=vendor -gcflags=-trimpath=$GOPATH -asmflags=-trimpath=$GOPATH -ldflags "-s -w" -o ./bin/${filename} ./cmd/gmock/main.go
+    CGO_ENABLED=0 GOOS=${goos} GOARCH=${goarch} go build -mod=vendor -gcflags=-trimpath=$GOPATH -asmflags=-trimpath=$GOPATH -ldflags "-s -w" -o ./bin/${filename} ./main.go
 
     # if build success
     if [[ $? == 0 ]];then

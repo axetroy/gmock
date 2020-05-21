@@ -5,15 +5,42 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strconv"
 
 	"github.com/axetroy/gmock/internal/app"
 	"github.com/axetroy/gmock/internal/lib/daemon"
 )
 
-func main() {
+const defaultPort = 8080
+const defaultHost = "localhost"
 
-	port := flag.Int("port", 8080, "port of server")
-	host := flag.String("host", "localhost", "address of server")
+func getPort() int {
+	PORT := os.Getenv("PORT")
+
+	if PORT == "" {
+		return defaultPort
+	}
+
+	if port, err := strconv.Atoi(PORT); err != nil {
+		return defaultPort
+	} else {
+		return port
+	}
+}
+
+func getHost() string {
+	HOST := os.Getenv("HOST")
+
+	if HOST == "" {
+		return defaultHost
+	}
+
+	return HOST
+}
+
+func main() {
+	port := flag.Int("port", getPort(), "port of server")
+	host := flag.String("host", getHost(), "address of server")
 	isDaemonMode := flag.Bool("daemon", false, "enable daemon mod")
 
 	flag.Parse()
