@@ -27,7 +27,7 @@ jobs:
           go env
       - name: Test
         env:
-          GITHUB_CI: true
+          GITHUB_CI: 1
         run: make test
 
       - name: Build

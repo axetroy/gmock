@@ -144,6 +144,7 @@ func TestServer(t *testing.T) {
 
 func TestServerExample(t *testing.T) {
 	if len(os.Getenv("GItHUB_CI")) > 0 {
+		fmt.Println("在 Github 中运行")
 		cwd, _ := os.Getwd()
 		app.RootDir = path.Join(cwd, "..", "..", "..", "example")
 	} else {
