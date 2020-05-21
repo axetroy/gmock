@@ -31,10 +31,10 @@ func Render(req *http.Request) ([]byte, int, error) {
 	t := template.New(req.URL.Path)
 
 	if t, err = t.Funcs(template.FuncMap{
-		"FuncMakeSlice":     function.FuncMakeSlice,
-		"MakeSliceByLength": function.MakeSliceByLength,
-		"PlusInt":           function.PlusInt,
-		"MinusInt":          function.MinusInt,
+		"makeSlice":         function.FuncMakeSlice,
+		"makeSliceByLength": function.MakeSliceByLength,
+		"plusInt":           function.PlusInt,
+		"minusInt":          function.MinusInt,
 	}).Parse(string(b)); err != nil {
 		return nil, http.StatusInternalServerError, err
 	}
