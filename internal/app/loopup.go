@@ -64,6 +64,16 @@ func Lookup(rootDir string, method string, u *url.URL) (*string, map[string]stri
 	if u.Path == "/favicon.ico" {
 		return nil, nil
 	}
+
+	if u.Path == "/" {
+		target := path.Join(rootDir, "."+method+".json")
+		if _, err := os.Stat(target); os.IsNotExist(err) {
+			return nil, nil
+		} else {
+			return &target, map[string]string{}
+		}
+	}
+
 	method = strings.ToLower(method)
 	pathArr := strings.Split(strings.TrimPrefix(u.Path, "/"), "/")
 

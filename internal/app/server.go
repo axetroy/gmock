@@ -1,6 +1,7 @@
 package app
 
 import (
+	"io"
 	"log"
 	"net/http"
 	"os"
@@ -40,6 +41,10 @@ func (h Handler) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 			if data != nil {
 				if b, ok := data.Body.([]byte); ok {
 					_, _ = res.Write(b)
+				} else if reader, ok := data.Body.(*io.Reader); ok {
+					_, _ = io.Copy(res, *reader)
+				} else if str, ok := data.Body.(string); ok {
+					_, _ = res.Write([]byte(str))
 				} else {
 					_, _ = res.Write(nil)
 				}

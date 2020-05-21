@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"io"
 	"io/ioutil"
 	"net/http"
 	"os"
@@ -14,10 +15,6 @@ import (
 	"github.com/axetroy/gmock/internal/app/function"
 	"github.com/axetroy/gmock/internal/lib/mock"
 )
-
-type RenderStat struct {
-	filepath string
-}
 
 func rend(templateName string, context map[string]interface{}, input []byte, output *bytes.Buffer) error {
 	t := template.New(templateName)
@@ -55,6 +52,7 @@ func Render(req *http.Request) (*Schema, error) {
 	var (
 		result = Schema{}
 		buff   = bytes.NewBuffer(nil)
+		reader io.Reader
 	)
 	filepath, routeParams := Lookup(RootDir, req.Method, req.URL)
 
@@ -98,28 +96,33 @@ func Render(req *http.Request) (*Schema, error) {
 				redirect = strings.TrimPrefix(str, "file://")
 			}
 
-			var target string
+			var targetFile string
 
 			if path.IsAbs(redirect) {
-				target = redirect
+				targetFile = redirect
 			} else {
-				target = path.Join(path.Dir(*filepath), redirect)
+				targetFile = path.Join(path.Dir(*filepath), redirect)
 			}
 
-			if tpl, err := ioutil.ReadFile(target); err != nil {
-				return nil, err
-			} else {
-				if isTemplate {
+			if isTemplate {
+				if tpl, err := ioutil.ReadFile(targetFile); err != nil {
+					return nil, err
+				} else {
 					// reset to empty
 					buff = bytes.NewBuffer(nil)
 					// compile template
 					if err := rend(req.URL.Path, context, tpl, buff); err != nil {
 						return nil, err
 					}
+				}
+			} else {
+				if fileStat, err := os.Open(targetFile); err != nil {
+					return nil, err
 				} else {
-					buff = bytes.NewBuffer(tpl)
+					reader = fileStat
 				}
 			}
+
 		} else {
 			buff = bytes.NewBuffer([]byte(str))
 		}
@@ -131,7 +134,11 @@ func Render(req *http.Request) (*Schema, error) {
 		}
 	}
 
-	result.Body = buff.Bytes()
+	if reader != nil {
+		result.Body = &reader
+	} else {
+		result.Body = buff.Bytes()
+	}
 
 	return &result, nil
 }
