@@ -8,10 +8,14 @@
 | ----------------- | ----------------------- | ---------------------- | ---------------------------------------------------------- |
 | 运算              | --                      | --                     | --                                                         |
 | plusInt           | 累加函数                | `plusInt ...int`       | `plusInt 1 2` 等于 `3`                                     |
+| plusFloat         | 累加函数                | `plusInt ...float64`   | `plusInt 0.1 0.2` 等于 `0.3`                               |
 | minusInt          | 累减函数                | `minusInt ...int`      | `minusInt 2 1` 等于 `1`                                    |
+| minusFloat        | 累减函数                | `minusInt ...float64`  | `minusInt 0.2 0.1` 等于 `0.1`                              |
 | timesInt          | 累乘函数                | `timesInt ...int`      | `timesInt 2 3` 等于 `6`                                    |
+| timesFloat        | 累乘函数                | `timesInt ...float64`  | `timesInt 0.2 0.3` 等于 `0.06`                             |
 | divInt            | 累除函数                | `divInt ...int`        | `divInt 6 2` 等于 `3`                                      |
-| 生成器            | --                      | --                     | --                                                         |
+| divFloat          | 累除函数                | `divInt ...float64`    | `divInt 0.6 0.2` 等于 `3`                                  |
+| 随机数            | --                      | --                     | --                                                         |
 | randomStr         | 生成 n 个长度随机字符串 | `randomStr int string` | `randomStr 6` 等于 `生成长度为 6 的字符串`，第二个参数可选 |
 | rangeInt          | 生成 n - m 范围内的整数 | `rangeInt int int`     | `rangeInt 1 10` 等于 `生成 1 - 10 范围内的整数`            |
 | 数组              | --                      | --                     | --                                                         |

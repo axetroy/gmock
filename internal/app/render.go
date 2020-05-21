@@ -35,13 +35,18 @@ func Render(req *http.Request) ([]byte, int, error) {
 		"makeSlice":         function.FuncMakeSlice,
 		"makeSliceByLength": function.MakeSliceByLength,
 		// math
-		"plusInt":  function.PlusInt,
-		"minusInt": function.MinusInt,
-		"timesInt": function.TimesInt,
-		"divInt":   function.DivInt,
+		"plusInt":    function.PlusInt,
+		"plusFloat":  function.PlusFloat,
+		"minusInt":   function.MinusInt,
+		"minusFloat": function.MinusFloat,
+		"timesInt":   function.TimesInt,
+		"timesFloat": function.TimesFloat,
+		"divInt":     function.DivInt,
+		"divFloat":   function.DivFloat,
 		// random
-		"randomStr": function.RandomStr,
-		"rangeInt":  function.RangeInt,
+		"randomStr":  function.RandomStr,
+		"rangeInt":   function.RangeInt,
+		"rangeFloat": function.RangeFloat,
 	}).Parse(string(b)); err != nil {
 		return nil, http.StatusInternalServerError, err
 	}
