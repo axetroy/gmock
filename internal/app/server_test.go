@@ -2,6 +2,7 @@ package app_test
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/axetroy/gmock/internal/app"
 	"github.com/axetroy/mocker"
 	"github.com/stretchr/testify/assert"
@@ -149,6 +150,8 @@ func TestServerExample(t *testing.T) {
 		cwd, _ := os.Getwd()
 		app.RootDir = path.Join(cwd, "..", "..", "example")
 	}
+
+	fmt.Println("RootDir: ", app.RootDir)
 
 	mock := mocker.New(app.Handler{})
 
