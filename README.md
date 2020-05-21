@@ -8,6 +8,8 @@
 
 > 接口未至，开发先行
 
+这里有一些 [example](/example) 已经部署到 [heroku](https://g-mock.herokuapp.com/template/context/faker)
+
 特性:
 
 - [x] 支持所有 HTTP 方法
