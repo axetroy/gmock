@@ -143,8 +143,8 @@ func TestServer(t *testing.T) {
 }
 
 func TestServerExample(t *testing.T) {
-	cwd, _ := os.Getwd()
-	app.RootDir = path.Join(cwd, "..", "..", "example")
+	GOPATH := os.Getenv("GOPATH")
+	app.RootDir = path.Join(GOPATH, "src", "github.com", "axetroy", "gmock", "example")
 	fmt.Println("App Root: ", app.RootDir)
 	mock := mocker.New(app.Handler{})
 
