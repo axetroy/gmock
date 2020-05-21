@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"errors"
 	"github.com/axetroy/gmock/internal/app/function"
+	"github.com/axetroy/gmock/internal/lib/mock"
 	"io/ioutil"
 	"net/http"
 	"os"
@@ -56,6 +57,7 @@ func Render(req *http.Request) ([]byte, int, error) {
 	err = t.Execute(&buff, map[string]interface{}{
 		"Request": req,         // The request object
 		"Params":  routeParams, // The Params of Route
+		"Faker":   mock.Mock{},
 	})
 
 	if err != nil {

@@ -4,6 +4,10 @@ github.com/axetroy/go-fs
 # github.com/axetroy/mocker v1.1.0
 ## explicit
 github.com/axetroy/mocker
+# github.com/bxcodec/faker/v3 v3.3.1
+## explicit
+github.com/bxcodec/faker/v3
+github.com/bxcodec/faker/v3/support/slice
 # github.com/davecgh/go-spew v1.1.0
 github.com/davecgh/go-spew/spew
 # github.com/pmezard/go-difflib v1.0.0
