@@ -141,7 +141,7 @@ func TestServer(t *testing.T) {
 	}
 }
 
-func TestServer2(t *testing.T) {
+func TestServerExample(t *testing.T) {
 	cwd, _ := os.Getwd()
 	app.RootDir = path.Join(cwd, "..", "..", "example")
 	mock := mocker.New(app.Handler{})
