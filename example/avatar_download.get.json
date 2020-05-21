@@ -1,11 +1,7 @@
 {
   "body": "file://./avatar.jpeg",
   "headers": {
-    "Content-Type": [
-      "image/jpeg"
-    ],
-    "Content-Disposition": [
-      "attachment;filename=avatar.jpeg"
-    ]
+    "Content-Type": "image/jpeg",
+    "Content-Disposition": "attachment;filename=avatar.jpeg"
   }
 }
