@@ -4,7 +4,7 @@
 
 其中上下文包含三个部分
 
-1. Request
+### 1. Request
 
 [Request](https://golang.org/pkg/net/http/#Request) 是 Golang 的原生对象，里面包含了本次请求的相关信息
 
@@ -25,7 +25,7 @@ $ curl http://localhost:8080/template/context/request
 /template/context/request
 ```
 
-2. Params
+### 2. Params
 
 Params 是动态路由的参数, 例如 `/user/:id` 中的 `id` 则为 Params 的一部分
 
@@ -51,7 +51,7 @@ $ curl http://localhost:8080/template/context/user/321
 {"uid": 321}
 ```
 
-3. Faker
+### 3. Faker
 
 Faker 提供了模拟假数据, 引用了 [faker 库](https://pkg.go.dev/github.com/bxcodec/faker/v3?tab=doc) 的实现
 
