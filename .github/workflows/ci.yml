@@ -55,10 +55,7 @@ jobs:
       - uses: actions/download-artifact@v2
         with:
           name: release
-
-      - name: files
-        run: |
-          ls -lh
+          path: ./bin
 
       - uses: softprops/action-gh-release@v1
         env:
