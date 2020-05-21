@@ -16,6 +16,12 @@ import (
 	"github.com/axetroy/gmock/internal/lib/mock"
 )
 
+type Schema struct {
+	Status  *int        `json:"status"`  // 返回的状态码
+	Body    interface{} `json:"body"`    // 请求体
+	Headers interface{} `json:"headers"` // 返回头, 可以是 map[string]string 类型，也可以是 map[string][]string
+}
+
 func rend(templateName string, context map[string]interface{}, input []byte, output *bytes.Buffer) error {
 	t := template.New(templateName)
 

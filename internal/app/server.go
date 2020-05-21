@@ -1,11 +1,13 @@
 package app
 
 import (
+	"fmt"
 	"io"
 	"log"
 	"net/http"
 	"os"
 	"path"
+	"reflect"
 	"strings"
 	"time"
 )
@@ -14,12 +16,6 @@ import (
 var RootDir string
 
 type Handler struct {
-}
-
-type Schema struct {
-	Status  *int                 `json:"status"`  // 返回的状态码
-	Body    interface{}          `json:"body"`    // 请求体
-	Headers *map[string][]string `json:"headers"` // 返回头
 }
 
 func allowCORS(res http.ResponseWriter, req *http.Request) (skip bool) {
@@ -96,10 +92,30 @@ func (h Handler) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 	}
 
 	if data.Headers != nil {
-		for key, values := range *data.Headers {
-			for _, value := range values {
-				res.Header().Add(key, value)
+		v := reflect.ValueOf(data.Headers)
+
+		if v.Kind() == reflect.Map {
+			headers := res.Header()
+			for _, key := range v.MapKeys() {
+				strct := v.MapIndex(key)
+
+				k := fmt.Sprintf("%v", key.Interface())
+
+				if val, ok := (strct.Interface()).(string); ok {
+					headers.Set(k, val)
+				} else if values, ok := (strct.Interface()).([]interface{}); ok {
+					for _, value := range values {
+						headers.Add(k, fmt.Sprintf("%v", value))
+					}
+				}
+
 			}
+		} else {
+			// invalid format for header
+			// invalid header
+			statusCode = http.StatusInternalServerError
+			err = fmt.Errorf("invalid headers: `%v`", data.Headers)
+			return
 		}
 	}
 }
