@@ -38,15 +38,12 @@ func getHost() string {
 	return HOST
 }
 
-func main() {
-	log.Println(os.Args)
-	port := flag.Int("port", getPort(), "port of server")
-	host := flag.String("host", getHost(), "address of server")
-	isDaemonMode := flag.Bool("daemon", false, "enable daemon mod")
+func getDir() string {
+	var targetDir string = os.Getenv("DIR")
 
-	flag.Parse()
-
-	targetDir := ""
+	if targetDir != "" {
+		return targetDir
+	}
 
 	if len(flag.Args()) > 0 {
 		targetDir = flag.Arg(0)
@@ -57,6 +54,19 @@ func main() {
 			targetDir = cwd
 		}
 	}
+
+	return targetDir
+}
+
+func main() {
+	log.Println(os.Args)
+	port := flag.Int("port", getPort(), "port of server")
+	host := flag.String("host", getHost(), "address of server")
+	isDaemonMode := flag.Bool("daemon", false, "enable daemon mod")
+
+	flag.Parse()
+
+	targetDir := getDir()
 
 	addr := fmt.Sprintf("%s:%d", *host, *port)
 
