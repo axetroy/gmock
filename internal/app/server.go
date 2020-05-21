@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	"path"
+	"strings"
 	"time"
 )
 
@@ -21,12 +22,41 @@ type Schema struct {
 	Headers *map[string][]string `json:"headers"` // 返回头
 }
 
+func allowCORS(res http.ResponseWriter, req *http.Request) (skip bool) {
+	res.Header().Set("Access-Control-Allow-Origin", res.Header().Get("Origin"))
+	res.Header().Set("Access-Control-Allow-Credentials", res.Header().Get("true"))
+	res.Header().Set("Access-Control-Allow-Methods", res.Header().Get(strings.Join([]string{
+		http.MethodGet,
+		http.MethodHead,
+		http.MethodPost,
+		http.MethodPut,
+		http.MethodPatch,
+		http.MethodDelete,
+		http.MethodConnect,
+		http.MethodOptions,
+		http.MethodTrace,
+	}, ",")))
+
+	if req.Method == http.MethodOptions {
+		res.WriteHeader(http.StatusNoContent)
+		_, _ = res.Write(nil)
+		skip = true
+		return
+	}
+
+	return skip
+}
+
 func (h Handler) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 	var (
 		err        error
 		statusCode = 200
 		data       *Schema
 	)
+
+	if skip := allowCORS(res, req); skip {
+		return
+	}
 
 	defer func() {
 
