@@ -1,18 +1,14 @@
 package app_test
 
 import (
-	"bytes"
 	"encoding/json"
-	"fmt"
 	"github.com/axetroy/gmock/internal/app"
 	"github.com/axetroy/mocker"
 	"github.com/stretchr/testify/assert"
 	"io/ioutil"
 	"net/http"
 	"os"
-	"os/exec"
 	"path"
-	"strings"
 	"testing"
 )
 
@@ -146,16 +142,14 @@ func TestServer(t *testing.T) {
 }
 
 func TestServerExample(t *testing.T) {
-	cmd := exec.Command("go", "env", "GOPATH")
+	if len(os.Getenv("GItHUB_CI")) > 0 {
+		cwd, _ := os.Getwd()
+		app.RootDir = path.Join(cwd, "..", "..", "..", "example")
+	} else {
+		cwd, _ := os.Getwd()
+		app.RootDir = path.Join(cwd, "..", "..", "example")
+	}
 
-	var buff bytes.Buffer
-
-	cmd.Stdout = &buff
-
-	assert.Nil(t, cmd.Run())
-
-	app.RootDir = path.Join(strings.TrimSpace(buff.String()), "src", "github.com", "axetroy", "gmock", "example")
-	fmt.Println("App Root: ", app.RootDir)
 	mock := mocker.New(app.Handler{})
 
 	// GET /hello
