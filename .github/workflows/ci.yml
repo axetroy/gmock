@@ -28,7 +28,7 @@ jobs:
       - name: Test
         env:
           GITHUB_CI: 1
-        run: test-ci
+        run: make test-ci
 
       - name: Build
         run: make build
