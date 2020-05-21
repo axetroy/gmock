@@ -14,17 +14,6 @@
 - [x] 以最低的成本兼容 JSON 接口
 - [x] 自定义模版
 
-## 安装方式
-
-如果你使用 `Linux` 或 `macOS`， 你可以输入一下命令安装:
-
-```shell
-# 安装最新版本
-curl -fsSL https://raw.githubusercontent.com/axetroy/gmock/master/install.sh | bash
-# 安装指定的版本
-curl -fsSL https://raw.githubusercontent.com/axetroy/gmock/master/install.sh | bash -s v0.1.0
-```
-
 ## 快速开始
 
 首先先创建一个用户存放 APIs 文件的目录
@@ -49,25 +38,7 @@ $ curl http://localhost:8080/v1/ping
 tong
 ```
 
-## 文档
-
-所有的 APIs 文件命名规则遵循 `{name}.{method}.json`. `name` 为文件名，`method` 为 http 的小写方法
-
-并且 JSON 的文件内容遵循一下格式, 其中 `body` 为必填
-
-```go
-type Schema struct {
-	Status  *int                 `json:"status"`  // 返回的状态码
-	Body    interface{}          `json:"body"`    // 请求体
-	Headers *map[string][]string `json:"headers"` // 返回头
-}
-```
-
-文件名 `{name}` 也可以是动态参数，以 `[name]` 为格式
-
-例如文件 `$root/v1/user/[id].get.json` 则匹配路由 `GET /v1/user/{id}`
-
-如果你觉得简单的模版无法满足复杂的 mock 需求，那么还可以使用模版功能
+## [文档](https://axetroy.github.io/gmock)
 
 ## 从源码中构建
 

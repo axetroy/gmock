@@ -47,4 +47,6 @@ $ cat ./example/template/context/user/[id].get.json
 $ gmock ./example
 $ curl http://localhost:8080/template/context/user/123
 {"uid": 123}
+$ curl http://localhost:8080/template/context/user/321
+{"uid": 321}
 ```
