@@ -1,3 +1,6 @@
 {
-  "body": "template://./home.html"
+  "body": "template://./home.html",
+  "headers": {
+    "Content-Type": ["text/html;charset=utf-8"]
+  }
 }
