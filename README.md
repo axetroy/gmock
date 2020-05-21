@@ -16,6 +16,23 @@
 - [x] 自定义模版，满足复杂需求
 - [ ] TODO: 文件流
 
+### 安装
+
+### Unix
+
+如果你使用 `Linux` 或 `macOS`， 你可以输入一下命令安装:
+
+```shell
+# 安装最新版本
+curl -fsSL https://raw.githubusercontent.com/axetroy/gmock/master/install.sh | bash
+# 安装指定的版本
+curl -fsSL https://raw.githubusercontent.com/axetroy/gmock/master/install.sh | bash -s v0.1.0
+```
+
+### Windows
+
+从 [Github Release](https://github.com/axetroy/gmock/releases) 页面下载文件
+
 ## 快速开始
 
 首先先创建一个存放 APIs 文件的目录
