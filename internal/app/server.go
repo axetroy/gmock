@@ -1,13 +1,10 @@
 package app
 
 import (
-	"encoding/json"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
 	"path"
-	"strings"
 	"time"
 )
 
@@ -27,62 +24,36 @@ func (h Handler) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 	var (
 		err        error
 		statusCode = 200
-		filepath   string
-		fileBytes  []byte
+		data       *Schema
 	)
 
 	defer func() {
+
 		if err != nil {
-			res.WriteHeader(http.StatusInternalServerError)
+			if statusCode == http.StatusOK {
+				statusCode = http.StatusInternalServerError
+			}
+			res.WriteHeader(statusCode)
 			_, _ = res.Write([]byte(err.Error()))
+		} else {
+			res.WriteHeader(statusCode)
+			if data != nil {
+				if b, ok := data.Body.([]byte); ok {
+					_, _ = res.Write(b)
+				} else {
+					_, _ = res.Write(nil)
+				}
+			} else {
+				_, _ = res.Write(nil)
+			}
 		}
 	}()
 
-	if filepath, fileBytes, statusCode, err = Render(req); err != nil {
-		return
-	}
-
-	data := Schema{}
-
-	if er := json.Unmarshal(fileBytes, &data); err != nil {
-		statusCode = http.StatusInternalServerError
-		err = er
-		return
-	}
-
-	var body []byte
-
-	if str, ok := data.Body.(string); ok {
-		// hack file proto
-		if strings.HasPrefix(str, "file://") {
-			redirect := strings.TrimPrefix(str, "file://")
-
-			var target string
-
-			if path.IsAbs(redirect) {
-				target = redirect
-			} else {
-				target = path.Join(path.Dir(filepath), redirect)
-			}
-
-			if b, err := ioutil.ReadFile(target); err != nil {
-				if os.IsExist(err) {
-					statusCode = http.StatusNotFound
-				} else {
-					statusCode = http.StatusInternalServerError
-				}
-			} else {
-				body = b
-			}
-		} else {
-			body = []byte(str)
+	if data, err = Render(req); err != nil {
+		if os.IsNotExist(err) {
+			statusCode = http.StatusNotFound
 		}
-	} else {
-		if b, err := json.Marshal(data.Body); err != nil {
-			statusCode = http.StatusInternalServerError
-		} else {
-			body = b
-		}
+		return
 	}
 
 	if data.Status != nil {
@@ -96,10 +67,6 @@ func (h Handler) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 			}
 		}
 	}
-
-	res.WriteHeader(statusCode)
-
-	_, _ = res.Write(body)
 }
 
 func Server(addr string, targetDir string) error {
@@ -122,7 +89,7 @@ func Server(addr string, targetDir string) error {
 
 	log.Printf("Root Dir: %s", RootDir)
 
-	log.Printf("Listen on %s\n.", addr)
+	log.Printf("Listen on %s.\n", addr)
 
 	if err := s.ListenAndServe(); err != nil {
 		return err
