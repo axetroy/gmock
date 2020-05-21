@@ -4,6 +4,7 @@
 - [路由](/router)
   - [基础路由](/router/basic)
   - [动态路由](/router/dynamic)
+  - [文件流](/router/file)
 - [模版](/template)
   - [基本模版](/template/basic)
   - [上下文](/template/context)

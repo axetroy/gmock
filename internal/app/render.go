@@ -11,22 +11,23 @@ import (
 	"text/template"
 )
 
-func Render(req *http.Request) ([]byte, int, error) {
+// return file path & content & status code & error
+func Render(req *http.Request) (string, []byte, int, error) {
 	filepath, routeParams := Lookup(RootDir, req.Method, req.URL)
 
 	if filepath == nil {
-		return nil, http.StatusNotFound, errors.New(http.StatusText(http.StatusNotFound))
+		return "", nil, http.StatusNotFound, errors.New(http.StatusText(http.StatusNotFound))
 	}
 
 	// if file not exist
 	if _, err := os.Stat(*filepath); os.IsNotExist(err) {
-		return nil, http.StatusNotFound, errors.New(http.StatusText(http.StatusNotFound))
+		return *filepath, nil, http.StatusNotFound, errors.New(http.StatusText(http.StatusNotFound))
 	}
 
 	b, err := ioutil.ReadFile(*filepath)
 
 	if err != nil {
-		return nil, http.StatusInternalServerError, err
+		return *filepath, nil, http.StatusInternalServerError, err
 	}
 
 	t := template.New(req.URL.Path)
@@ -49,7 +50,7 @@ func Render(req *http.Request) ([]byte, int, error) {
 		"rangeInt":   function.RangeInt,
 		"rangeFloat": function.RangeFloat,
 	}).Parse(string(b)); err != nil {
-		return nil, http.StatusInternalServerError, err
+		return *filepath, nil, http.StatusInternalServerError, err
 	}
 
 	var buff bytes.Buffer
@@ -61,8 +62,8 @@ func Render(req *http.Request) ([]byte, int, error) {
 	})
 
 	if err != nil {
-		return nil, http.StatusInternalServerError, err
+		return *filepath, nil, http.StatusInternalServerError, err
 	}
 
-	return buff.Bytes(), http.StatusOK, nil
+	return *filepath, buff.Bytes(), http.StatusOK, nil
 }

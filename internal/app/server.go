@@ -2,10 +2,12 @@ package app
 
 import (
 	"encoding/json"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
 	"path"
+	"strings"
 	"time"
 )
 
@@ -25,6 +27,7 @@ func (h Handler) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 	var (
 		err        error
 		statusCode = 200
+		filepath   string
 		fileBytes  []byte
 	)
 
@@ -35,7 +38,7 @@ func (h Handler) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 		}
 	}()
 
-	if fileBytes, statusCode, err = Render(req); err != nil {
+	if filepath, fileBytes, statusCode, err = Render(req); err != nil {
 		return
 	}
 
@@ -50,7 +53,30 @@ func (h Handler) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 	var body []byte
 
 	if str, ok := data.Body.(string); ok {
-		body = []byte(str)
+		// hack file proto
+		if strings.HasPrefix(str, "file://") {
+			redirect := strings.TrimPrefix(str, "file://")
+
+			var target string
+
+			if path.IsAbs(redirect) {
+				target = redirect
+			} else {
+				target = path.Join(path.Dir(filepath), redirect)
+			}
+
+			if b, err := ioutil.ReadFile(target); err != nil {
+				if os.IsExist(err) {
+					statusCode = http.StatusNotFound
+				} else {
+					statusCode = http.StatusInternalServerError
+				}
+			} else {
+				body = b
+			}
+		} else {
+			body = []byte(str)
+		}
 	} else {
 		if b, err := json.Marshal(data.Body); err != nil {
 			statusCode = http.StatusInternalServerError
