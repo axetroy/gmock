@@ -11,10 +11,32 @@
 
 ```go
 type Schema struct {
-	Status  *int                 `json:"status"`  // 返回的状态码
-	Body    interface{}          `json:"body"`    // 请求体
-	Headers *map[string][]string `json:"headers"` // 返回头
+	Status  *int        `json:"status"`  // 返回的状态码
+	Body    interface{} `json:"body"`    // 请求体
+	Headers interface{} `json:"headers"` // 返回头, 可以是 map[string]string 类型，也可以是 map[string][]string
 }
 ```
 
 其中 `body` 定义了返回体，为必填项
+
+例如
+
+```json
+{
+	status: 200,
+	"body": "hello world!"
+	"headers": {
+		"Content-Types": "text/plain"
+	}
+}
+```
+
+```json
+{
+	status: 200,
+	"body": "hello world!"
+	"headers": {
+		"X-Role": ["admin", "user"]
+	}
+}
+```
