@@ -1,4 +1,5 @@
 - [首页](/)
+- [安装](/installation)
 - [快速开始](/start)
 - [路由](/router)
   - [基础路由](/router/basic)
