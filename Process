@@ -1,1 +1,1 @@
-web: pwd && ls -lh && ./bin/gmock ./example
+web: ./bin/gmock ./example
