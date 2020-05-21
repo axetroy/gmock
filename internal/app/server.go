@@ -19,7 +19,13 @@ type Handler struct {
 }
 
 func allowCORS(res http.ResponseWriter, req *http.Request) (skip bool) {
-	res.Header().Set("Access-Control-Allow-Origin", res.Header().Get("Origin"))
+	origin := res.Header().Get("Origin")
+
+	if origin == "" {
+		origin = "*"
+	}
+
+	res.Header().Set("Access-Control-Allow-Origin", origin)
 	res.Header().Set("Access-Control-Allow-Credentials", res.Header().Get("true"))
 	res.Header().Set("Access-Control-Allow-Methods", res.Header().Get(strings.Join([]string{
 		http.MethodGet,
