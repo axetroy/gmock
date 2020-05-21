@@ -12,7 +12,7 @@ import (
 )
 
 const defaultPort = 8080
-const defaultHost = "localhost"
+const defaultHost = "0.0.0.0"
 
 func getPort() int {
 	PORT := os.Getenv("PORT")
