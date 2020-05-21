@@ -59,7 +59,6 @@ func getDir() string {
 }
 
 func main() {
-	log.Println(os.Args)
 	port := flag.Int("port", getPort(), "port of server")
 	host := flag.String("host", getHost(), "address of server")
 	isDaemonMode := flag.Bool("daemon", false, "enable daemon mod")
