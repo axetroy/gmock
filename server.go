@@ -98,11 +98,12 @@ func (h Handler) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 		statusCode = *data.Status
 	}
 
+	headers := res.Header()
+
 	if data.Headers != nil {
 		v := reflect.ValueOf(data.Headers)
 
 		if v.Kind() == reflect.Map {
-			headers := res.Header()
 			for _, key := range v.MapKeys() {
 				strct := v.MapIndex(key)
 
@@ -128,8 +129,8 @@ func (h Handler) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 
 	// if not set the response's content type
 	// Then automatically detect the type
-	if len(res.Header().Values("Content-Type")) == 0 {
-		res.Header().Set("Content-Type", contentType)
+	if headers != nil && len(headers.Values("Content-Type")) == 0 {
+		headers.Set("Content-Type", contentType)
 	}
 }
 
