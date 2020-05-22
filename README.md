@@ -1,4 +1,5 @@
 [![Build Status](https://github.com/axetroy/gmock/workflows/ci/badge.svg)](https://github.com/axetroy/gmock/actions)
+[![Coverage Status](https://coveralls.io/repos/github/axetroy/gmock/badge.svg?branch=master)](https://coveralls.io/github/axetroy/gmock?branch=master)
 [![Go Report Card](https://goreportcard.com/badge/github.com/axetroy/gmock)](https://goreportcard.com/report/github.com/axetroy/gmock)
 ![Latest Version](https://img.shields.io/github/v/release/axetroy/gmock.svg)
 ![License](https://img.shields.io/github/license/axetroy/gmock.svg)

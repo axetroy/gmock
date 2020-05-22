@@ -25,6 +25,7 @@ jobs:
         run: |
           go version
           go env
+
       - name: Test
         run: make test
 
@@ -38,13 +39,14 @@ jobs:
           path: ./bin
 
 
-      # after success
-      #      - name: Coverage
-      #        if: startsWith(matrix.os, 'ubuntu')
-      #        run: |
-      #          go get golang.org/x/tools/cmd/cover
-      #          go get github.com/mattn/goveralls
-      #          /home/runner/go/bin/goveralls -coverprofile=coverage.out -service=github-action -repotoken ${{ secrets.COVERALLS_TOKEN }}
+      - name: Coverage
+        if: github.repository == 'axetroy/gmock'
+        env:
+          COVERALLS_TOKEN: ${{ secrets.COVERALLS_TOKEN }}
+        run: |
+          GO111MODULE=off go get golang.org/x/tools/cmd/cover
+          GO111MODULE=off go get github.com/mattn/goveralls
+          $(go env GOPATH)/bin/goveralls -coverprofile=coverage.out -service="GitHub Action" -jobid="${{ github.run_id }}" -jobnumber="${{ github.run_number }}" -reponame="${{ github.repository }}"
 
   release:
     name: Release to Github
