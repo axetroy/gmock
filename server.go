@@ -57,6 +57,8 @@ func (h Handler) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 		contentType string
 	)
 
+	res.Header().Set("X-Powered-By", "github.com/axetroy.gmock")
+
 	if skip := allowCORS(res, req); skip {
 		return
 	}
