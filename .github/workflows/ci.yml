@@ -38,9 +38,8 @@ jobs:
           name: release
           path: ./bin
 
-
-      - name: Coverage
-        if: github.repository == 'axetroy/gmock'
+      - name: Send Coverage
+        if: runner.os == 'macOS' && github.repository == 'axetroy/gmock'
         env:
           COVERALLS_TOKEN: ${{ secrets.COVERALLS_TOKEN }}
         run: |
