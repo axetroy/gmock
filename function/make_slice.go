@@ -1,5 +1,5 @@
 package function
 
-func FuncMakeSlice(args ...interface{}) []interface{} {
+func MakeSlice(args ...interface{}) []interface{} {
 	return args
 }
