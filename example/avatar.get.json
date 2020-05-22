@@ -1,6 +1,3 @@
 {
-  "body": "file://./avatar.jpeg",
-  "headers": {
-    "Content-Type": "image/jpeg"
-  }
+  "body": "file://./avatar.jpeg"
 }

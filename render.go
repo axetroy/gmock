@@ -6,6 +6,7 @@ import (
 	"errors"
 	"io"
 	"io/ioutil"
+	"mime"
 	"net/http"
 	"os"
 	"path"
@@ -54,11 +55,12 @@ func rend(templateName string, context map[string]interface{}, input []byte, out
 }
 
 // return file path & content & status code & error
-func Render(req *http.Request) (*Schema, error) {
+func Render(req *http.Request) (*Schema, string, error) {
 	var (
-		result = Schema{}
-		buff   = bytes.NewBuffer(nil)
-		reader io.Reader
+		result      = Schema{}
+		buff        = bytes.NewBuffer(nil)
+		reader      io.Reader
+		contentType = "text/plain"
 	)
 	filepath, routeParams := Lookup(RootDir, req.Method, req.URL)
 
@@ -69,24 +71,24 @@ func Render(req *http.Request) (*Schema, error) {
 	}
 
 	if filepath == nil {
-		return nil, os.ErrNotExist
+		return nil, contentType, os.ErrNotExist
 	}
 
 	// if file not exist
 	if _, err := os.Stat(*filepath); os.IsNotExist(err) {
-		return nil, errors.New(http.StatusText(http.StatusNotFound))
+		return nil, contentType, errors.New(http.StatusText(http.StatusNotFound))
 	}
 
 	if b, err := ioutil.ReadFile(*filepath); err != nil {
-		return nil, err
+		return nil, contentType, err
 	} else {
 		if err := rend(req.URL.Path, context, b, buff); err != nil {
-			return nil, err
+			return nil, contentType, err
 		}
 	}
 
 	if err := json.Unmarshal(buff.Bytes(), &result); err != nil {
-		return nil, err
+		return nil, contentType, err
 	}
 
 	if str, ok := result.Body.(string); ok {
@@ -110,32 +112,36 @@ func Render(req *http.Request) (*Schema, error) {
 				targetFile = path.Join(path.Dir(*filepath), redirect)
 			}
 
+			contentType = mime.TypeByExtension(path.Ext(targetFile))
+
 			if isTemplate {
 				if tpl, err := ioutil.ReadFile(targetFile); err != nil {
-					return nil, err
+					return nil, contentType, err
 				} else {
 					// reset to empty
 					buff = bytes.NewBuffer(nil)
 					// compile template
 					if err := rend(req.URL.Path, context, tpl, buff); err != nil {
-						return nil, err
+						return nil, contentType, err
 					}
 				}
 			} else {
 				if fileStat, err := os.Open(targetFile); err != nil {
-					return nil, err
+					return nil, contentType, err
 				} else {
 					reader = fileStat
 				}
 			}
 
 		} else {
+
 			buff = bytes.NewBuffer([]byte(str))
 		}
 	} else {
 		if data, err := json.Marshal(result.Body); err != nil {
-			return nil, err
+			return nil, contentType, err
 		} else {
+			contentType = mime.TypeByExtension(".json")
 			buff = bytes.NewBuffer(data)
 		}
 	}
@@ -146,5 +152,5 @@ func Render(req *http.Request) (*Schema, error) {
 		result.Body = buff.Bytes()
 	}
 
-	return &result, nil
+	return &result, contentType, nil
 }

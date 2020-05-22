@@ -51,9 +51,10 @@ func allowCORS(res http.ResponseWriter, req *http.Request) (skip bool) {
 
 func (h Handler) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 	var (
-		err        error
-		statusCode = 200
-		data       *Schema
+		err         error
+		statusCode  = 200
+		data        *Schema
+		contentType string
 	)
 
 	if skip := allowCORS(res, req); skip {
@@ -86,7 +87,7 @@ func (h Handler) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 		}
 	}()
 
-	if data, err = Render(req); err != nil {
+	if data, contentType, err = Render(req); err != nil {
 		if os.IsNotExist(err) {
 			statusCode = http.StatusNotFound
 		}
@@ -123,6 +124,12 @@ func (h Handler) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 			err = fmt.Errorf("invalid headers: `%v`", data.Headers)
 			return
 		}
+	}
+
+	// if not set the response's content type
+	// Then automatically detect the type
+	if len(res.Header().Values("Content-Type")) == 0 {
+		res.Header().Set("Content-Type", contentType)
 	}
 }
 
