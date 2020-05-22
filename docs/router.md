@@ -5,7 +5,7 @@
 `{name}`: 路由名称
 `{method}`: HTTP 方法名. 全部为小写. 例如 `get`/`post`/`put`
 
-例如 `user.get.json` -> [GET] /user
+例如 `user.get.json` 对应的路由为 `[GET] /user`
 
 ### 文件内容规范
 
