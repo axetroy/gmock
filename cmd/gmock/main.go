@@ -7,6 +7,7 @@ import (
 	"os"
 	"strconv"
 
+	"github.com/axetroy/gmock"
 	"github.com/axetroy/gmock/lib/daemon"
 )
 
@@ -69,7 +70,7 @@ func main() {
 	addr := fmt.Sprintf("%s:%d", *host, *port)
 
 	err := daemon.Start(func() error {
-		if err := Server(addr, targetDir); err != nil {
+		if err := gmock.Server(addr, targetDir); err != nil {
 			return err
 		}
 

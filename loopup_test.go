@@ -1,4 +1,4 @@
-package main
+package gmock_test
 
 import (
 	"net/http"
@@ -8,6 +8,8 @@ import (
 	"reflect"
 	"regexp"
 	"testing"
+
+	"github.com/axetroy/gmock"
 )
 
 func TestNameToRegExp(t *testing.T) {
@@ -57,7 +59,7 @@ func TestNameToRegExp(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := NameToRegExp(tt.args.name); !reflect.DeepEqual(got, tt.want) {
+			if got := gmock.NameToRegExp(tt.args.name); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("NameToRegExp() = %v, want %v", got, tt.want)
 			}
 		})
@@ -101,7 +103,7 @@ func TestMatchFileName(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := MatchFileName(tt.args.rule, tt.args.name); got != tt.want {
+			if got := gmock.MatchFileName(tt.args.rule, tt.args.name); got != tt.want {
 				t.Errorf("MatchFileName() = %v, want %v", got, tt.want)
 			}
 		})
@@ -163,7 +165,7 @@ func TestLookup(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, got1 := Lookup(tt.args.rootDir, tt.args.method, tt.args.u)
+			got, got1 := gmock.Lookup(tt.args.rootDir, tt.args.method, tt.args.u)
 			if !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("Lookup() got = %v, want %v", got, tt.want)
 			}
@@ -206,7 +208,7 @@ func TestGetRealFileName(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := GetRealFileName(tt.args.fileName); got != tt.want {
+			if got := gmock.GetRealFileName(tt.args.fileName); got != tt.want {
 				t.Errorf("GetRealFileName() = %v, want %v", got, tt.want)
 			}
 		})
@@ -246,7 +248,7 @@ func TestExtractParamsFromFileName(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ExtractParamsFromFileName(tt.args.fileName, tt.args.urlPath); !reflect.DeepEqual(got, tt.want) {
+			if got := gmock.ExtractParamsFromFileName(tt.args.fileName, tt.args.urlPath); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("ExtractParamsFromFileName() = %v, want %v", got, tt.want)
 			}
 		})
