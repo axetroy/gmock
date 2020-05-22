@@ -10,7 +10,7 @@ func RandomStr(length int, base ...string) string {
 
 	var letterRunes = []rune("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
 
-	if len(base) >= 0 {
+	if len(base) > 0 {
 		letterRunes = []rune(base[0])
 	}
 
