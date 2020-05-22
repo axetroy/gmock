@@ -8,6 +8,7 @@ jobs:
     timeout-minutes: 10
     strategy:
       matrix:
+        kind: ['build', 'test']
         go: ['^1.14.2']
         os: [ubuntu-latest, windows-latest, macos-latest]
     name: Go ${{ matrix.go }} test in ${{ matrix.os }}
@@ -25,9 +26,20 @@ jobs:
           go env
 
       - name: Test
+        if: matrix.kind == 'test'
         run: make test
 
+      - name: Coverage
+        if: matrix.kind == 'test' && runner.os == 'macOS' && github.repository == 'axetroy/gmock'
+        env:
+          COVERALLS_TOKEN: ${{ secrets.COVERALLS_TOKEN }}
+        run: |
+          GO111MODULE=off go get golang.org/x/tools/cmd/cover
+          GO111MODULE=off go get github.com/mattn/goveralls
+          $(go env GOPATH)/bin/goveralls -coverprofile=coverage.out -service="GitHub Action" -jobid="${{ github.run_id }}" -jobnumber="${{ github.run_number }}" -reponame="${{ github.repository }}"
+
       - name: Build
+        if: matrix.kind == 'build'
         run: make build
 
       - uses: actions/upload-artifact@v2
@@ -35,15 +47,6 @@ jobs:
         with:
           name: release
           path: ./bin
-
-      - name: Send Coverage
-        if: runner.os == 'macOS' && github.repository == 'axetroy/gmock'
-        env:
-          COVERALLS_TOKEN: ${{ secrets.COVERALLS_TOKEN }}
-        run: |
-          GO111MODULE=off go get golang.org/x/tools/cmd/cover
-          GO111MODULE=off go get github.com/mattn/goveralls
-          $(go env GOPATH)/bin/goveralls -coverprofile=coverage.out -service="GitHub Action" -jobid="${{ github.run_id }}" -jobnumber="${{ github.run_number }}" -reponame="${{ github.repository }}"
 
   release:
     name: Release to Github
