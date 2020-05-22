@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"io/ioutil"
 	"mime"
@@ -63,6 +64,8 @@ func Render(req *http.Request) (*Schema, string, error) {
 		contentType = "text/plain"
 	)
 	filepath, routeParams := Lookup(RootDir, req.Method, req.URL)
+
+	fmt.Printf("Render `%s` with file `%v` \n", req.URL.Path, *filepath)
 
 	context := map[string]interface{}{
 		"Request": req,         // The request object
