@@ -8,5 +8,5 @@ import (
 )
 
 func TestDivFloat(t *testing.T) {
-	assert.Equal(t, float64(3), function.DivFloat(0.6, 0.2))
+	assert.Equal(t, float64(2.9999999999999996), function.DivFloat(0.6, 0.2))
 }

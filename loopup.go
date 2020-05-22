@@ -66,7 +66,7 @@ func Lookup(rootDir string, method string, u *url.URL) (*string, map[string]stri
 	}
 
 	if u.Path == "/" {
-		target := path.Join(rootDir, "."+method+".json")
+		target := path.Join(rootDir, method+".json")
 		if _, err := os.Stat(target); os.IsNotExist(err) {
 			return nil, nil
 		} else {

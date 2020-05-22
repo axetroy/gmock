@@ -28,7 +28,7 @@ func rend(templateName string, context map[string]interface{}, input []byte, out
 
 	if t, err := t.Funcs(template.FuncMap{
 		// slice
-		"makeSlice":         function.FuncMakeSlice,
+		"makeSlice":         function.MakeSlice,
 		"makeSliceByLength": function.MakeSliceByLength,
 		// math
 		"plusInt":    function.PlusInt,
