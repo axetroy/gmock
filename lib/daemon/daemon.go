@@ -66,7 +66,7 @@ func Start(action Action, shouldRunInDaemon bool) error {
 
 		pid := os.Getpid()
 
-		if err := ioutil.WriteFile(pidFilePath, []byte(fmt.Sprintf("%d", pid)), 0o600); err != nil {
+		if err := ioutil.WriteFile(pidFilePath, []byte(fmt.Sprintf("%d", pid)), 0600); err != nil {
 			return err
 		}
 
