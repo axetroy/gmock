@@ -1,4 +1,4 @@
-# github.com/axetroy/mocker v1.1.0
+# github.com/axetroy/mocker v1.2.0
 ## explicit
 github.com/axetroy/mocker
 # github.com/bxcodec/faker/v3 v3.3.1
