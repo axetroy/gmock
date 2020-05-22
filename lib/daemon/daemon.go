@@ -2,14 +2,12 @@ package daemon
 
 import (
 	"fmt"
-	"github.com/axetroy/go-fs"
+	"io/ioutil"
 	"log"
 	"os"
 	"os/exec"
 	"path"
 	"path/filepath"
-	"strconv"
-	"syscall"
 )
 
 type Action func() error
@@ -40,7 +38,7 @@ func Start(action Action, shouldRunInDaemon bool) error {
 			return err
 		}
 
-		if fs.PathExists(pidFilePath) {
+		if _, err := os.Stat(pidFilePath); err == nil {
 			log.Fatalf("已经存在进程，如果进程没有启动，请删除文件 `%s`\n", pidFilePath)
 		}
 
@@ -68,54 +66,10 @@ func Start(action Action, shouldRunInDaemon bool) error {
 
 		pid := os.Getpid()
 
-		if err := fs.WriteFile(pidFilePath, []byte(fmt.Sprintf("%d", pid))); err != nil {
+		if err := ioutil.WriteFile(pidFilePath, []byte(fmt.Sprintf("%d", pid)), 0o600); err != nil {
 			return err
 		}
 
 		return action()
 	}
-}
-
-func Stop() error {
-	pidFilePath, err1 := getPidFilePath()
-
-	if err1 != nil {
-		return err1
-	}
-
-	if !fs.PathExists(pidFilePath) {
-		log.Fatalf("找不到 pid 文件 `%s`\n", pidFilePath)
-	}
-
-	b, err2 := fs.ReadFile(pidFilePath)
-
-	if err2 != nil {
-		return nil
-	}
-
-	pidStr := string(b)
-
-	pid, err3 := strconv.Atoi(pidStr)
-
-	if err3 != nil {
-		return err3
-	}
-
-	log.Printf("正在结束进程 %d", pid)
-
-	ps, err4 := os.FindProcess(pid)
-
-	if err4 != nil {
-		return err4
-	}
-
-	if err5 := ps.Signal(syscall.SIGKILL); err5 != nil {
-		return err5
-	}
-
-	log.Printf("进程 %s 已结束.\n", pidStr)
-
-	_ = fs.Remove(pidFilePath)
-
-	return nil
 }

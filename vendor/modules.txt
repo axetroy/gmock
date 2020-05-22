@@ -1,6 +1,5 @@
 # github.com/axetroy/go-fs v1.0.0
 ## explicit
-github.com/axetroy/go-fs
 # github.com/axetroy/mocker v1.1.0
 ## explicit
 github.com/axetroy/mocker
