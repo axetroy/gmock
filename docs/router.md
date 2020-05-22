@@ -5,6 +5,8 @@
 `{name}`: 路由名称
 `{method}`: HTTP 方法名. 全部为小写. 例如 `get`/`post`/`put`
 
+例如 `user.get.json` -> [GET] /user
+
 ### 文件内容规范
 
 文件内容应该包含以下字段
