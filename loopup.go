@@ -61,12 +61,10 @@ func ExtractParamsFromFileName(fileName string, urlPath string) map[string]strin
 
 // Lookup router file and params context
 func Lookup(rootDir string, method string, u *url.URL) (*string, map[string]string) {
-	if u.Path == "/favicon.ico" {
-		return nil, nil
-	}
+	method = strings.ToLower(method)
 
 	if u.Path == "/" {
-		target := path.Join(rootDir, method+".json")
+		target := path.Join(rootDir, "."+method+".json")
 		if _, err := os.Stat(target); os.IsNotExist(err) {
 			return nil, nil
 		} else {
@@ -74,7 +72,10 @@ func Lookup(rootDir string, method string, u *url.URL) (*string, map[string]stri
 		}
 	}
 
-	method = strings.ToLower(method)
+	if u.Path == "/favicon.ico" {
+		return nil, nil
+	}
+
 	pathArr := strings.Split(strings.TrimPrefix(u.Path, "/"), "/")
 
 	routeParams := map[string]string{}
