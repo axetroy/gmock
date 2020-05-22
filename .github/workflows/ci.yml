@@ -11,7 +11,7 @@ jobs:
         kind: ['build', 'test']
         go: ['^1.14.2']
         os: [ubuntu-latest, windows-latest, macos-latest]
-    name: Go ${{ matrix.go }} test in ${{ matrix.os }}
+    name: Go ${{ matrix.go }} ${{ matrix.kind }} in ${{ matrix.os }}
 
     steps:
       - uses: actions/checkout@v2
