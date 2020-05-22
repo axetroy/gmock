@@ -1,10 +1,15 @@
 package function
 
-func MinusInt(params ...int) int {
-	result := 0
-	for _, p := range params {
-		result = result - p
+import "math/big"
+
+func MinusInt(params ...int64) int64 {
+	var result = big.NewInt(params[0])
+
+	rest := params[1:]
+
+	for _, p := range rest {
+		result = new(big.Int).Sub(result, big.NewInt(p))
 	}
 
-	return result
+	return result.Int64()
 }
