@@ -1,4 +1,4 @@
-package app
+package main
 
 import (
 	"bytes"
@@ -12,8 +12,8 @@ import (
 	"strings"
 	"text/template"
 
-	"github.com/axetroy/gmock/internal/app/function"
-	"github.com/axetroy/gmock/internal/lib/mock"
+	"github.com/axetroy/gmock/function"
+	"github.com/axetroy/gmock/lib/mock"
 )
 
 type Schema struct {

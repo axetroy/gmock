@@ -1,9 +1,8 @@
-package app_test
+package main_test
 
 import (
 	"encoding/json"
-	"fmt"
-	"github.com/axetroy/gmock/internal/app"
+	"github.com/axetroy/gmock"
 	"github.com/axetroy/mocker"
 	"github.com/stretchr/testify/assert"
 	"io/ioutil"
@@ -17,8 +16,8 @@ func TestServer(t *testing.T) {
 	cwd, _ := os.Getwd()
 
 	{
-		app.RootDir = path.Join(cwd, "__test__", "hello_world")
-		mock := mocker.New(app.Handler{})
+		main.RootDir = path.Join(cwd, "__test__", "hello_world")
+		mock := mocker.New(main.Handler{})
 
 		r := mock.Get("/hello", nil, nil)
 
@@ -30,8 +29,8 @@ func TestServer(t *testing.T) {
 	}
 
 	{
-		app.RootDir = path.Join(cwd, "__test__", "params")
-		mock := mocker.New(app.Handler{})
+		main.RootDir = path.Join(cwd, "__test__", "params")
+		mock := mocker.New(main.Handler{})
 
 		{
 			r := mock.Get("/user/123", nil, nil)
@@ -78,8 +77,8 @@ func TestServer(t *testing.T) {
 	}
 
 	{
-		app.RootDir = path.Join(cwd, "__test__", "user_context_with_template")
-		mock := mocker.New(app.Handler{})
+		main.RootDir = path.Join(cwd, "__test__", "user_context_with_template")
+		mock := mocker.New(main.Handler{})
 
 		r := mock.Get("/hello_id", nil, nil)
 
@@ -92,8 +91,8 @@ func TestServer(t *testing.T) {
 	}
 
 	{
-		app.RootDir = path.Join(cwd, "__test__", "status_code")
-		mock := mocker.New(app.Handler{})
+		main.RootDir = path.Join(cwd, "__test__", "status_code")
+		mock := mocker.New(main.Handler{})
 
 		r := mock.Get("/error", nil, nil)
 
@@ -106,8 +105,8 @@ func TestServer(t *testing.T) {
 	}
 
 	{
-		app.RootDir = path.Join(cwd, "__test__", "loop_output")
-		mock := mocker.New(app.Handler{})
+		main.RootDir = path.Join(cwd, "__test__", "loop_output")
+		mock := mocker.New(main.Handler{})
 
 		r := mock.Get("/array", nil, nil)
 
@@ -124,8 +123,8 @@ func TestServer(t *testing.T) {
 	}
 
 	{
-		app.RootDir = path.Join(cwd, "__test__", "loop_output")
-		mock := mocker.New(app.Handler{})
+		main.RootDir = path.Join(cwd, "__test__", "loop_output")
+		mock := mocker.New(main.Handler{})
 
 		r := mock.Get("/function", nil, nil)
 
@@ -143,18 +142,10 @@ func TestServer(t *testing.T) {
 }
 
 func TestServerExample(t *testing.T) {
-	if len(os.Getenv("GItHUB_CI")) > 0 {
-		fmt.Println("在 Github 中运行")
-		cwd, _ := os.Getwd()
-		app.RootDir = path.Join(cwd, "..", "..", "..", "example")
-	} else {
-		cwd, _ := os.Getwd()
-		app.RootDir = path.Join(cwd, "..", "..", "example")
-	}
+	cwd, _ := os.Getwd()
+	main.RootDir = path.Join(cwd, "example")
 
-	fmt.Println("RootDir: ", app.RootDir)
-
-	mock := mocker.New(app.Handler{})
+	mock := mocker.New(main.Handler{})
 
 	// GET /hello
 	{
@@ -187,7 +178,7 @@ func TestServerExample(t *testing.T) {
 
 		assert.Nil(t, err)
 
-		b, err := ioutil.ReadFile(path.Join(app.RootDir, "home.html"))
+		b, err := ioutil.ReadFile(path.Join(main.RootDir, "home.html"))
 
 		assert.Nil(t, err)
 		assert.Equal(t, string(b), string(body))
@@ -224,7 +215,7 @@ func TestServerExample(t *testing.T) {
 
 		assert.Nil(t, err)
 
-		b, err := ioutil.ReadFile(path.Join(app.RootDir, "avatar.jpeg"))
+		b, err := ioutil.ReadFile(path.Join(main.RootDir, "avatar.jpeg"))
 
 		assert.Nil(t, err)
 		assert.Equal(t, b, body)
@@ -241,7 +232,7 @@ func TestServerExample(t *testing.T) {
 
 		assert.Nil(t, err)
 
-		b, err := ioutil.ReadFile(path.Join(app.RootDir, "avatar.jpeg"))
+		b, err := ioutil.ReadFile(path.Join(main.RootDir, "avatar.jpeg"))
 
 		assert.Nil(t, err)
 		assert.Equal(t, b, body)

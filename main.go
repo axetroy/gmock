@@ -7,8 +7,7 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/axetroy/gmock/internal/app"
-	"github.com/axetroy/gmock/internal/lib/daemon"
+	"github.com/axetroy/gmock/lib/daemon"
 )
 
 const defaultPort = 8080
@@ -70,7 +69,7 @@ func main() {
 	addr := fmt.Sprintf("%s:%d", *host, *port)
 
 	err := daemon.Start(func() error {
-		if err := app.Server(addr, targetDir); err != nil {
+		if err := Server(addr, targetDir); err != nil {
 			return err
 		}
 
