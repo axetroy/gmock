@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"os"
 	"path"
+	"strings"
 	"testing"
 )
 
@@ -202,7 +203,7 @@ func TestServerExample(t *testing.T) {
 <body>
   <p>Your request URL path: /template</p>
 </body>
-</html>`, string(body))
+</html>`, strings.ReplaceAll(string(body), "\r\n", "\n"))
 	}
 
 	// GET /avatar
