@@ -158,16 +158,16 @@ func TestServerExample(t *testing.T) {
 		assert.Equal(t, "hello world!", string(body))
 	}
 
-	// GET /
-	{
-		r := mock.Get("/", nil, nil)
-
-		assert.Equal(t, http.StatusOK, r.Code)
-		body, err := ioutil.ReadAll(r.Body)
-
-		assert.Nil(t, err)
-		assert.Equal(t, "root path", string(body))
-	}
+	//// GET /
+	//{
+	//	r := mock.Get("/", nil, nil)
+	//
+	//	assert.Equal(t, http.StatusOK, r.Code)
+	//	body, err := ioutil.ReadAll(r.Body)
+	//
+	//	assert.Nil(t, err)
+	//	assert.Equal(t, "root path", string(body))
+	//}
 
 	// GET /home
 	{
