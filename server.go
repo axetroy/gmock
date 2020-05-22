@@ -19,7 +19,7 @@ type Handler struct {
 }
 
 func allowCORS(res http.ResponseWriter, req *http.Request) (skip bool) {
-	origin := res.Header().Get("Origin")
+	origin := req.Header.Get("Origin")
 
 	if origin == "" {
 		origin = "*"
