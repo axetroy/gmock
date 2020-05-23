@@ -1,5 +1,6 @@
 github.com/axetroy/mocker v1.1.0 h1:RF0u9igoWMHRns2wbboAcm7Vu9ncczco2w7Jxy6AxOE=
 github.com/axetroy/mocker v1.1.0/go.mod h1:uYztBX5hnXFF0nr0KzypTTZiDQDNbOGvCL+B/J014+Q=
+github.com/axetroy/mocker v1.2.0/go.mod h1:uYztBX5hnXFF0nr0KzypTTZiDQDNbOGvCL+B/J014+Q=
 github.com/bxcodec/faker/v3 v3.3.1 h1:G7uldFk+iO/ES7W4v7JlI/WU9FQ6op9VJ15YZlDEhGQ=
 github.com/bxcodec/faker/v3 v3.3.1/go.mod h1:gF31YgnMSMKgkvl+fyEo1xuSMbEuieyqfeslGYFjneM=
 github.com/davecgh/go-spew v1.1.0 h1:ZDRjVQ15GmhC3fiQ8ni8+OwkZQO4DARzQgrnXU1Liz8=
