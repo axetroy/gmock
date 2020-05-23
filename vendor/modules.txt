@@ -6,13 +6,13 @@ github.com/axetroy/mocker
 github.com/bxcodec/faker/v3
 github.com/bxcodec/faker/v3/support/slice
 # github.com/davecgh/go-spew v1.1.1
-github.com/davecgh/go-spew/spew
-# github.com/gin-gonic/gin v1.6.3
 ## explicit
+github.com/davecgh/go-spew/spew
 # github.com/pmezard/go-difflib v1.0.0
 github.com/pmezard/go-difflib/difflib
 # github.com/stretchr/testify v1.5.1
 ## explicit
 github.com/stretchr/testify/assert
 # gopkg.in/yaml.v2 v2.2.8
+## explicit
 gopkg.in/yaml.v2
