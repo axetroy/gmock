@@ -1,7 +1,7 @@
 # github.com/axetroy/mocker v1.2.0
 ## explicit
 github.com/axetroy/mocker
-# github.com/bxcodec/faker/v3 v3.4.0
+# github.com/bxcodec/faker/v3 v3.5.0
 ## explicit
 github.com/bxcodec/faker/v3
 github.com/bxcodec/faker/v3/support/slice
