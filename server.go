@@ -27,6 +27,7 @@ func allowCORS(res http.ResponseWriter, req *http.Request) (skip bool) {
 
 	res.Header().Set("Access-Control-Allow-Origin", origin)
 	res.Header().Set("Access-Control-Allow-Credentials", "true")
+	res.Header().Set("Access-Control-Allow-Headers", "*")
 	res.Header().Set("Access-Control-Allow-Methods", strings.Join([]string{
 		http.MethodGet,
 		http.MethodHead,
