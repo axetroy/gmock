@@ -30,6 +30,9 @@ func rend(templateName string, context map[string]interface{}, input []byte, out
 		// slice
 		"MakeSlice":         function.MakeSlice,
 		"MakeSliceByLength": function.MakeSliceByLength,
+		// encoding
+		"Base64Encoding": function.Base64Encoding,
+		"Base64Decoding": function.Base64Decoding,
 		// math
 		"Plus":  function.Plus,
 		"Minus": function.Minus,
