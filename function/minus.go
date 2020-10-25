@@ -1,0 +1,93 @@
+package function
+
+import (
+	"errors"
+	"math/big"
+)
+
+func Minus(params ...interface{}) float64 {
+	result := big.NewFloat(0)
+
+	for index, p := range params {
+		switch v := p.(type) {
+		case int:
+			if index == 0 {
+				result = result.Add(result, big.NewFloat(float64(v)))
+			} else {
+				result = new(big.Float).Sub(result, big.NewFloat(float64(v)))
+			}
+		case uint:
+			if index == 0 {
+				result = result.Add(result, big.NewFloat(float64(v)))
+			} else {
+				result = new(big.Float).Sub(result, big.NewFloat(float64(v)))
+			}
+		case int8:
+			if index == 0 {
+				result = result.Add(result, big.NewFloat(float64(v)))
+			} else {
+				result = new(big.Float).Sub(result, big.NewFloat(float64(v)))
+			}
+		case uint8:
+			if index == 0 {
+				result = result.Add(result, big.NewFloat(float64(v)))
+			} else {
+				result = new(big.Float).Sub(result, big.NewFloat(float64(v)))
+			}
+		case int16:
+			if index == 0 {
+				result = result.Add(result, big.NewFloat(float64(v)))
+			} else {
+				result = new(big.Float).Sub(result, big.NewFloat(float64(v)))
+			}
+		case uint16:
+			if index == 0 {
+				result = result.Add(result, big.NewFloat(float64(v)))
+			} else {
+				result = new(big.Float).Sub(result, big.NewFloat(float64(v)))
+			}
+		case int32:
+			if index == 0 {
+				result = result.Add(result, big.NewFloat(float64(v)))
+			} else {
+				result = new(big.Float).Sub(result, big.NewFloat(float64(v)))
+			}
+		case uint32:
+			if index == 0 {
+				result = result.Add(result, big.NewFloat(float64(v)))
+			} else {
+				result = new(big.Float).Sub(result, big.NewFloat(float64(v)))
+			}
+		case int64:
+			if index == 0 {
+				result = result.Add(result, big.NewFloat(float64(v)))
+			} else {
+				result = new(big.Float).Sub(result, big.NewFloat(float64(v)))
+			}
+		case uint64:
+			if index == 0 {
+				result = result.Add(result, big.NewFloat(float64(v)))
+			} else {
+				result = new(big.Float).Sub(result, big.NewFloat(float64(v)))
+			}
+		case float32:
+			if index == 0 {
+				result = result.Add(result, big.NewFloat(float64(v)))
+			} else {
+				result = new(big.Float).Sub(result, big.NewFloat(float64(v)))
+			}
+		case float64:
+			if index == 0 {
+				result = result.Add(result, big.NewFloat(float64(v)))
+			} else {
+				result = new(big.Float).Sub(result, big.NewFloat(float64(v)))
+			}
+		default:
+			panic(errors.New("Invalid type for 'Minus' function"))
+		}
+	}
+
+	val, _ := result.Float64()
+
+	return val
+}

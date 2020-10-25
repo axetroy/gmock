@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"io"
 	"io/ioutil"
 	"mime"
@@ -29,21 +28,17 @@ func rend(templateName string, context map[string]interface{}, input []byte, out
 
 	if t, err := t.Funcs(template.FuncMap{
 		// slice
-		"makeSlice":         function.MakeSlice,
-		"makeSliceByLength": function.MakeSliceByLength,
+		"MakeSlice":         function.MakeSlice,
+		"MakeSliceByLength": function.MakeSliceByLength,
 		// math
-		"plusInt":    function.PlusInt,
-		"plusFloat":  function.PlusFloat,
-		"minusInt":   function.MinusInt,
-		"minusFloat": function.MinusFloat,
-		"timesInt":   function.TimesInt,
-		"timesFloat": function.TimesFloat,
-		"divInt":     function.DivInt,
-		"divFloat":   function.DivFloat,
+		"Plus":  function.Plus,
+		"Minus": function.Minus,
+		"Times": function.Times,
+		"Div":   function.Div,
 		// random
-		"randomStr":  function.RandomStr,
-		"rangeInt":   function.RangeInt,
-		"rangeFloat": function.RangeFloat,
+		"RandomStr":  function.RandomStr,
+		"RangeInt":   function.RangeInt,
+		"RangeFloat": function.RangeFloat,
 	}).Parse(string(input)); err != nil {
 		return err
 	} else {
@@ -64,8 +59,6 @@ func Render(req *http.Request) (*Schema, string, error) {
 		contentType = "text/plain"
 	)
 	filepath, routeParams := Lookup(RootDir, req.Method, req.URL)
-
-	fmt.Printf("Render `%s` with file `%v` \n", req.URL.Path, *filepath)
 
 	context := map[string]interface{}{
 		"Request": req,         // The request object

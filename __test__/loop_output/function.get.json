@@ -1,7 +1,7 @@
 {
   "body": [{{ $length := 3 }}{{ $slice := makeSliceByLength $length }}
     {{ range $slice }}
-     {{ if ne . 2 }}{{ plusInt . 1 }},{{ else }}{{ plusInt . 1 }}{{ end }}
+     {{ if ne . 2 }}{{ Plus . 1 }},{{ else }}{{ Plus . 1 }}{{ end }}
     {{ end}}
   ]
 }

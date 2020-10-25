@@ -1,0 +1,7 @@
+{
+  "body": {
+    "age": {{ Minus 10 2 3 3 }},
+    "times": {{ Times 3 2 }},
+    "div": {{ Div 3 2 }}
+  }
+}
