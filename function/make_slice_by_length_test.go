@@ -1,9 +1,10 @@
 package function_test
 
 import (
+	"testing"
+
 	"github.com/axetroy/gmock/function"
 	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 func TestMakeSliceByLength(t *testing.T) {

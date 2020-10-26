@@ -1,10 +1,11 @@
 package function_test
 
 import (
-	"github.com/axetroy/gmock/function"
-	"github.com/stretchr/testify/assert"
 	"regexp"
 	"testing"
+
+	"github.com/axetroy/gmock/function"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestRandomStr(t *testing.T) {

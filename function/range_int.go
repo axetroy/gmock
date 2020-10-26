@@ -16,8 +16,8 @@ func RangeInt(min int, max int) int {
 	n := r.Intn(max)
 
 	if n < min {
-		n = n + min
+		n += min
 	}
 
-	return min
+	return n
 }
