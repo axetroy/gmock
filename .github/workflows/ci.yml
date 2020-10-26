@@ -9,7 +9,7 @@ jobs:
     strategy:
       matrix:
         kind: ['build', 'test']
-        go: ['^1.14.2']
+        go: ['^1.15.2']
         os: [ubuntu-latest, windows-latest, macos-latest]
     name: Go ${{ matrix.go }} ${{ matrix.kind }} in ${{ matrix.os }}
 
