@@ -3,12 +3,14 @@ package gmock
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"io"
 	"io/ioutil"
 	"mime"
 	"net/http"
 	"os"
 	"path"
+	"regexp"
 	"strings"
 	"text/template"
 
@@ -111,28 +113,43 @@ func Render(req *http.Request) (*Schema, string, error) {
 
 	if str, ok := result.Body.(string); ok {
 		// hack file proto
-		if strings.HasPrefix(str, "file://") || strings.HasPrefix(str, "template://") {
-			isTemplate := strings.HasPrefix(str, "template://")
+		reg, err := regexp.Compile(`^\w+:\/\/.+`)
 
-			var redirect string
+		if err != nil {
+			return nil, contentType, errors.WithStack(err)
+		}
 
-			if isTemplate {
-				redirect = strings.TrimPrefix(str, "template://")
-			} else {
-				redirect = strings.TrimPrefix(str, "file://")
-			}
+		if reg.MatchString(str) {
+			chars := strings.Split(str, "://")
 
-			var targetFile string
+			proto := chars[0]
+			params := strings.Join(chars[1:], "://")
 
-			if path.IsAbs(redirect) {
-				targetFile = redirect
-			} else {
-				targetFile = path.Join(path.Dir(*filepath), redirect)
-			}
+			switch proto {
+			case "file":
+				var targetFile string
+				if path.IsAbs(params) {
+					targetFile = params
+				} else {
+					targetFile = path.Join(path.Dir(*filepath), params)
+				}
+				contentType = mime.TypeByExtension(path.Ext(targetFile))
 
-			contentType = mime.TypeByExtension(path.Ext(targetFile))
+				if fileStat, err := os.Open(targetFile); err != nil {
+					return nil, contentType, errors.WithStack(err)
+				} else {
+					reader = fileStat
+				}
+			case "template":
+				var targetFile string
+				if path.IsAbs(params) {
+					targetFile = params
+				} else {
+					targetFile = path.Join(path.Dir(*filepath), params)
+				}
 
-			if isTemplate {
+				contentType = mime.TypeByExtension(path.Ext(targetFile))
+
 				if tpl, err := ioutil.ReadFile(targetFile); err != nil {
 					return nil, contentType, errors.WithStack(err)
 				} else {
@@ -143,16 +160,11 @@ func Render(req *http.Request) (*Schema, string, error) {
 						return nil, contentType, errors.WithStack(err)
 					}
 				}
-			} else {
-				if fileStat, err := os.Open(targetFile); err != nil {
-					return nil, contentType, errors.WithStack(err)
-				} else {
-					reader = fileStat
-				}
+			default:
+				return nil, contentType, errors.WithStack(errors.New(fmt.Sprintf("Invalid body proto '%s'", proto)))
 			}
 
 		} else {
-
 			buff = bytes.NewBuffer([]byte(str))
 		}
 	} else {
