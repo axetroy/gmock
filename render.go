@@ -35,6 +35,7 @@ func rend(templateName string, context map[string]interface{}, input []byte, out
 		// encoding
 		"Base64Encoding": function.Base64Encoding,
 		"Base64Decoding": function.Base64Decoding,
+		"Escape":         function.Escape,
 		// math
 		"Plus":  function.Plus,
 		"Minus": function.Minus,

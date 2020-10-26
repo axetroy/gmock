@@ -1,0 +1,21 @@
+{{ $length := 10 }}
+{{ $lastIndex := 9 }}
+{{ $escapeStr := "\"中文\"" }}
+
+{
+  "body": {
+    "code": 1,
+    "message": "success",
+    "data": [{{ $slice := MakeSliceByLength $length }}
+      {{ range $slice }}
+      { "id": "{{ . }}", "name": "{{ $.Faker.Name }}", "century": "{{ $.Faker.Century }}" } {{ if ne . $lastIndex }},{{ end }}
+      {{ end}}
+    ],
+    "escape": "{{ Escape $escapeStr }}",
+    "meta": {
+      "page": "{{ index (index .Request.URL.Query "page") 0 }}",
+      "per_page": "{{ index (index .Request.URL.Query "per_page") 0 }}",
+      "total": 100
+    }
+  }
+}
