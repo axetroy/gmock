@@ -51,7 +51,36 @@ $ curl http://localhost:8080/template/context/user/321
 {"uid": 321}
 ```
 
-### 3. Faker
+### 3. Body
+
+Body 是请求发送过来的数据体
+
+这里提供几种字段
+
+```go
+var Body []byte
+var BodyString string
+var BodyMap map[string]interface{}
+```
+
+```json
+{
+  "body": {
+    "string": "{{ .BodyString }}",
+    "bytes": "{{ .Body }}",
+    "map": "{{ .BodyMap }}",
+    "map.name": "{{ index .BodyMap "name"}}"
+  }
+}
+```
+
+```bash
+curl -X POST -d '{"name": "axetroy"}' http://localhost:8080
+
+{"bytes":"[123 34 110 97 109 101 34 58 32 34 97 120 101 116 114 111 121 34 125]","map":"map[name:axetroy]","map.name":"axetroy","string":"{\"name\": \"axetroy\"}"}
+```
+
+### 4. Faker
 
 Faker 提供了模拟假数据, 引用了 [faker 库](https://pkg.go.dev/github.com/bxcodec/faker/v3?tab=doc) 的实现
 

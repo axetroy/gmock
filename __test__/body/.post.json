@@ -1,0 +1,8 @@
+{
+  "body": {
+    "string": "{{ .BodyString }}",
+    "bytes": "{{ .Body }}",
+    "map": "{{ .BodyMap }}",
+    "map.name": "{{ index .BodyMap "name"}}"
+  }
+}

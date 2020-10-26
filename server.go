@@ -65,13 +65,12 @@ func (h Handler) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 	}
 
 	defer func() {
-
 		if err != nil {
 			if statusCode == http.StatusOK {
 				statusCode = http.StatusInternalServerError
 			}
 			res.WriteHeader(statusCode)
-			_, _ = res.Write([]byte(err.Error()))
+			_, _ = res.Write([]byte(fmt.Sprintf("%+v", err)))
 		} else {
 			res.WriteHeader(statusCode)
 			if data != nil {

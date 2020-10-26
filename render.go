@@ -3,7 +3,6 @@ package gmock
 import (
 	"bytes"
 	"encoding/json"
-	"errors"
 	"io"
 	"io/ioutil"
 	"mime"
@@ -15,6 +14,7 @@ import (
 
 	"github.com/axetroy/gmock/function"
 	"github.com/axetroy/gmock/lib/mock"
+	"github.com/pkg/errors"
 )
 
 type Schema struct {
@@ -46,7 +46,7 @@ func rend(templateName string, context map[string]interface{}, input []byte, out
 		return err
 	} else {
 		if err := t.Execute(output, context); err != nil {
-			return err
+			return errors.WithStack(err)
 		}
 	}
 
@@ -63,10 +63,27 @@ func Render(req *http.Request) (*Schema, string, error) {
 	)
 	filepath, routeParams := Lookup(RootDir, req.Method, req.URL)
 
+	body, err := ioutil.ReadAll(req.Body)
+
+	if err != nil {
+		return nil, contentType, errors.WithStack(err)
+	}
+
+	var bodyMap map[string]interface{}
+
+	_ = json.Unmarshal(body, &bodyMap)
+
+	var bodyStr string = string(body)
+
+	bodyStr = strings.Replace(bodyStr, `"`, `\"`, -1)
+
 	context := map[string]interface{}{
-		"Request": req,         // The request object
-		"Params":  routeParams, // The Params of Route
-		"Faker":   mock.Mock{},
+		"Request":    req,         // The request object
+		"Body":       body,        // The request body Bytes
+		"BodyString": bodyStr,     // The request body String
+		"BodyMap":    bodyMap,     // The request body Map
+		"Params":     routeParams, // The Params of Route
+		"Faker":      mock.Mock{},
 	}
 
 	if filepath == nil {
@@ -79,14 +96,16 @@ func Render(req *http.Request) (*Schema, string, error) {
 	}
 
 	if b, err := ioutil.ReadFile(*filepath); err != nil {
-		return nil, contentType, err
+		return nil, contentType, errors.WithStack(err)
 	} else {
 		if err := rend(req.URL.Path, context, b, buff); err != nil {
-			return nil, contentType, err
+			return nil, contentType, errors.WithStack(err)
 		}
 	}
 
 	if err := json.Unmarshal(buff.Bytes(), &result); err != nil {
+		err = errors.Wrapf(err, "invalid JSON file for '%s'", *filepath)
+		err = errors.Wrapf(err, "with file content\n=====Content Start=====\n%s\n=====Content End=====\n", buff.String())
 		return nil, contentType, err
 	}
 
@@ -115,18 +134,18 @@ func Render(req *http.Request) (*Schema, string, error) {
 
 			if isTemplate {
 				if tpl, err := ioutil.ReadFile(targetFile); err != nil {
-					return nil, contentType, err
+					return nil, contentType, errors.WithStack(err)
 				} else {
 					// reset to empty
 					buff = bytes.NewBuffer(nil)
 					// compile template
 					if err := rend(req.URL.Path, context, tpl, buff); err != nil {
-						return nil, contentType, err
+						return nil, contentType, errors.WithStack(err)
 					}
 				}
 			} else {
 				if fileStat, err := os.Open(targetFile); err != nil {
-					return nil, contentType, err
+					return nil, contentType, errors.WithStack(err)
 				} else {
 					reader = fileStat
 				}
@@ -138,7 +157,7 @@ func Render(req *http.Request) (*Schema, string, error) {
 		}
 	} else {
 		if data, err := json.Marshal(result.Body); err != nil {
-			return nil, contentType, err
+			return nil, contentType, errors.WithStack(err)
 		} else {
 			contentType = mime.TypeByExtension(".json")
 			buff = bytes.NewBuffer(data)
