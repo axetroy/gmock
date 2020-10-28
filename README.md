@@ -1,3 +1,5 @@
+![gmock](https://socialify.git.ci/axetroy/gmock/image?description=1&font=Inter&forks=1&issues=1&language=1&owner=1&pattern=Floating%20Cogs&pulls=1&stargazers=1&theme=Light)
+
 [![Build Status](https://github.com/axetroy/gmock/workflows/ci/badge.svg)](https://github.com/axetroy/gmock/actions)
 [![Coverage Status](https://coveralls.io/repos/github/axetroy/gmock/badge.svg?branch=master)](https://coveralls.io/github/axetroy/gmock?branch=master)
 [![Go Report Card](https://goreportcard.com/badge/github.com/axetroy/gmock)](https://goreportcard.com/report/github.com/axetroy/gmock)
