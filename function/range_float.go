@@ -12,11 +12,7 @@ func RangeFloat(min float64, max float64) float64 {
 	}
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))
 
-	n := r.Float64() * max
+	step := r.Float64() * (max - min)
 
-	if n < min {
-		n = n + min
-	}
-
-	return min
+	return min + step
 }

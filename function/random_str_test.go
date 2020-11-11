@@ -15,5 +15,5 @@ func TestRandomStr(t *testing.T) {
 
 	var str = function.RandomStr(6, "0123456789")
 	assert.Len(t, str, 6)
-	assert.True(t, regexp.MustCompile("^\\d{6}$").MatchString(str))
+	assert.True(t, regexp.MustCompile(`^\d{6}$`).MatchString(str))
 }
