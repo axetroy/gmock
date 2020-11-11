@@ -59,6 +59,35 @@ func rend(templateName string, context map[string]interface{}, input []byte, out
 	return nil
 }
 
+func ParseQuery(queryStr string) map[string]interface{} {
+	queryMap := map[string]interface{}{}
+
+	groups := strings.Split(queryStr, "&")
+
+	for _, group := range groups {
+		arr := strings.Split(group, "=")
+
+		key := arr[0]
+		value := strings.Join(arr[1:], "=")
+
+		if val, ok := queryMap[key]; ok {
+			switch v := val.(type) {
+			case string:
+				queryMap[key] = []string{v, value}
+			case []string:
+				newValue := append(v, value)
+
+				queryMap[key] = newValue
+			}
+		} else {
+			queryMap[key] = value
+		}
+
+	}
+
+	return queryMap
+}
+
 // return file path & content & status code & error
 func Render(req *http.Request) (*Schema, string, error) {
 	var (
@@ -91,11 +120,12 @@ func Render(req *http.Request) (*Schema, string, error) {
 	bodyStr = strings.Replace(bodyStr, `"`, `\"`, -1)
 
 	context := map[string]interface{}{
-		"Request":    req,         // The request object
-		"Body":       body,        // The request body Bytes
-		"BodyString": bodyStr,     // The request body String
-		"BodyMap":    bodyMap,     // The request body Map
-		"Params":     routeParams, // The Params of Route
+		"Request":    req,                          // The request object
+		"Body":       body,                         // The request body Bytes
+		"BodyString": bodyStr,                      // The request body String
+		"BodyMap":    bodyMap,                      // The request body Map
+		"Params":     routeParams,                  // The Params of Route
+		"Query":      ParseQuery(req.URL.RawQuery), // the query of URL
 		"Faker":      mock.Mock{},
 	}
 

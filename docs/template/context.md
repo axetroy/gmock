@@ -25,7 +25,13 @@ $ curl http://localhost:8080/template/context/request
 /template/context/request
 ```
 
-### 2. Params
+### 2. Query
+
+Query 是请求的 URL 上带的参数, 例如 `?foo=bar`
+
+类型为 `map[string]string` 或者 `map[string][]string`
+
+### 3. Params
 
 Params 是动态路由的参数, 例如 `/user/:id` 中的 `id` 则为 Params 的一部分
 
@@ -51,7 +57,7 @@ $ curl http://localhost:8080/template/context/user/321
 {"uid": 321}
 ```
 
-### 3. Body
+### 4. Body
 
 Body 是请求发送过来的数据体
 
@@ -80,7 +86,7 @@ curl -X POST -d '{"name": "axetroy"}' http://localhost:8080
 {"bytes":"[123 34 110 97 109 101 34 58 32 34 97 120 101 116 114 111 121 34 125]","map":"map[name:axetroy]","map.name":"axetroy","string":"{\"name\": \"axetroy\"}"}
 ```
 
-### 4. Faker
+### 5. Faker
 
 Faker 提供了模拟假数据, 引用了 [faker 库](https://pkg.go.dev/github.com/bxcodec/faker/v3?tab=doc) 的实现
 

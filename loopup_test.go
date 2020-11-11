@@ -33,28 +33,28 @@ func TestNameToRegExp(t *testing.T) {
 			args: args{
 				name: "[id]",
 			},
-			want: regexp.MustCompile("^[\\w\\d-]+$"),
+			want: regexp.MustCompile(`^[\w\d-]+$`),
 		},
 		{
 			name: "params & special characters 1",
 			args: args{
 				name: "[id].name",
 			},
-			want: regexp.MustCompile("^[\\w\\d-]+\\.name$"),
+			want: regexp.MustCompile(`^[\w\d-]+\.name$`),
 		},
 		{
 			name: "params & another special characters 2",
 			args: args{
 				name: "[id]-profile",
 			},
-			want: regexp.MustCompile("^[\\w\\d-]+\\-profile$"),
+			want: regexp.MustCompile(`^[\w\d-]+\-profile$`),
 		},
 		{
 			name: "params & another special characters 3",
 			args: args{
 				name: "^[id]-profile",
 			},
-			want: regexp.MustCompile("^\\^[\\w\\d-]+\\-profile$"),
+			want: regexp.MustCompile(`^\^[\w\d-]+\-profile$`),
 		},
 	}
 	for _, tt := range tests {
