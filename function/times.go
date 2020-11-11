@@ -3,6 +3,7 @@ package function
 import (
 	"errors"
 	"math/big"
+	"strconv"
 )
 
 func Times(params ...interface{}) float64 {
@@ -38,6 +39,12 @@ func Times(params ...interface{}) float64 {
 			result = new(big.Float).Mul(result, big.NewFloat(float64(v)))
 		case float64:
 			result = new(big.Float).Mul(result, big.NewFloat(v))
+		case string:
+			if f, err := strconv.ParseFloat(v, 10); err != nil {
+				panic(err)
+			} else {
+				result = new(big.Float).Mul(result, big.NewFloat(f))
+			}
 		default:
 			panic(errors.New("Invalid type for 'Times' function"))
 		}

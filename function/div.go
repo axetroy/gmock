@@ -3,6 +3,7 @@ package function
 import (
 	"errors"
 	"math/big"
+	"strconv"
 )
 
 func Div(params ...interface{}) float64 {
@@ -81,6 +82,16 @@ func Div(params ...interface{}) float64 {
 				result = result.Add(result, big.NewFloat(float64(v)))
 			} else {
 				result = new(big.Float).Quo(result, big.NewFloat(float64(v)))
+			}
+		case string:
+			if f, err := strconv.ParseFloat(v, 10); err != nil {
+				panic(err)
+			} else {
+				if index == 0 {
+					result = result.Add(result, big.NewFloat(float64(f)))
+				} else {
+					result = new(big.Float).Quo(result, big.NewFloat(f))
+				}
 			}
 		default:
 			panic(errors.New("Invalid type for 'Div' function"))
