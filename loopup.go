@@ -13,7 +13,7 @@ const ROUTER_PARAMS_PLACEHOLDER = "__ROUTER_PARAMS_PLACEHOLDER__"
 
 func NameToRegExp(name string) *regexp.Regexp {
 
-	paramsRegExp := regexp.MustCompile("\\[[\\w\\d-]+\\]")
+	paramsRegExp := regexp.MustCompile(`\[[\w\d-]+\]`)
 
 	name = paramsRegExp.ReplaceAllString(name, ROUTER_PARAMS_PLACEHOLDER)
 
@@ -45,7 +45,7 @@ func ExtractParamsFromFileName(fileName string, urlPath string) map[string]strin
 
 	params := map[string]string{}
 
-	paramsRegExp := regexp.MustCompile("\\[([\\w\\d-]+)\\]")
+	paramsRegExp := regexp.MustCompile(`\[([\w\d-]+)\]`)
 
 	matchers := paramsRegExp.FindAllStringSubmatch(fileName, -1)
 
