@@ -1,0 +1,3 @@
+{
+  "body": "Foo: {{index .Query "foo" }} and Bar: {{ index .Query "bar" }}"
+}
