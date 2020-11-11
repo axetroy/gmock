@@ -32,7 +32,7 @@
 # 安装最新版本
 curl -fsSL https://raw.githubusercontent.com/axetroy/gmock/master/install.sh | bash
 # 安装指定的版本
-curl -fsSL https://raw.githubusercontent.com/axetroy/gmock/master/install.sh | bash -s v0.3.0
+curl -fsSL https://raw.githubusercontent.com/axetroy/gmock/master/install.sh | bash -s v0.4.0
 ```
 
 ### Windows
