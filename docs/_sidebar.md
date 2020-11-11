@@ -5,6 +5,8 @@
   - [基础路由](/router/basic)
   - [动态路由](/router/dynamic)
   - [文件流](/router/file)
+  - [渲染 HTML](/router/html)
+  - [渲染 Markdown](/router/markdown)
 - [模版](/template)
   - [基本模版](/template/basic)
   - [上下文](/template/context)
