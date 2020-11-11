@@ -127,4 +127,18 @@ func TestServerExample(t *testing.T) {
 		assert.Nil(t, err)
 		assert.Equal(t, string(b), string(body))
 	}
+
+	// GET /markdown
+	{
+		r := mock.Get("/markdown-helloworld", nil, nil)
+
+		assert.Equal(t, http.StatusOK, r.Code)
+		assert.Equal(t, "text/html; charset=utf-8", r.Header().Get("Content-Type"))
+		body, err := ioutil.ReadAll(r.Body)
+
+		assert.Nil(t, err)
+
+		assert.Nil(t, err)
+		assert.Equal(t, string("<h3 id=\"hello-world\">hello world</h3>\n"), string(body))
+	}
 }
