@@ -16,6 +16,9 @@ import (
 
 	"github.com/axetroy/gmock/function"
 	"github.com/axetroy/gmock/lib/mock"
+	"github.com/gomarkdown/markdown"
+	"github.com/gomarkdown/markdown/parser"
+	"github.com/microcosm-cc/bluemonday"
 	"github.com/pkg/errors"
 )
 
@@ -65,6 +68,13 @@ func Render(req *http.Request) (*Schema, string, error) {
 		contentType = "text/plain"
 	)
 	filepath, routeParams := Lookup(RootDir, req.Method, req.URL)
+
+	if filepath == nil {
+		status := http.StatusNotFound
+		result.Status = &status
+		result.Body = nil
+		return &result, contentType, nil
+	}
 
 	body, err := ioutil.ReadAll(req.Body)
 
@@ -161,6 +171,28 @@ func Render(req *http.Request) (*Schema, string, error) {
 						return nil, contentType, errors.WithStack(err)
 					}
 				}
+			case "markdown":
+				var targetFile string
+				if path.IsAbs(params) {
+					targetFile = params
+				} else {
+					targetFile = path.Join(path.Dir(*filepath), params)
+				}
+
+				if markdownRaw, err := ioutil.ReadFile(targetFile); err != nil {
+					return nil, contentType, errors.WithStack(err)
+				} else {
+					extensions := parser.CommonExtensions | parser.AutoHeadingIDs
+					parser := parser.NewWithExtensions(extensions)
+
+					unsafe := markdown.ToHTML(markdownRaw, parser, nil)
+
+					html := bluemonday.UGCPolicy().SanitizeBytes(unsafe)
+
+					buff = bytes.NewBuffer(html)
+					contentType = mime.TypeByExtension(".html")
+				}
+
 			default:
 				return nil, contentType, errors.WithStack(errors.New(fmt.Sprintf("Invalid body proto '%s'", proto)))
 			}

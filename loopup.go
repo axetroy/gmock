@@ -9,11 +9,13 @@ import (
 	"strings"
 )
 
+const ROUTER_PARAMS_PLACEHOLDER = "__ROUTER_PARAMS_PLACEHOLDER__"
+
 func NameToRegExp(name string) *regexp.Regexp {
 
 	paramsRegExp := regexp.MustCompile("\\[[\\w\\d-]+\\]")
 
-	name = paramsRegExp.ReplaceAllString(name, "gmock_params")
+	name = paramsRegExp.ReplaceAllString(name, ROUTER_PARAMS_PLACEHOLDER)
 
 	// escapeRegExp := regexp.MustCompile("[.*+\\-?^${}()|[\\]\\\\]")
 	escapes := []string{"\\", ".", "*", "+", "-", "?", "^", "$", "{", "}", "[", "]"}
@@ -22,7 +24,7 @@ func NameToRegExp(name string) *regexp.Regexp {
 		name = strings.ReplaceAll(name, e, "\\"+e)
 	}
 
-	name = strings.ReplaceAll(name, "gmock_params", "[\\w\\d-]+")
+	name = strings.ReplaceAll(name, ROUTER_PARAMS_PLACEHOLDER, "[\\w\\d-]+")
 
 	return regexp.MustCompile("^" + name + "$")
 }
