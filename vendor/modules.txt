@@ -12,7 +12,7 @@ github.com/chris-ramon/douceur/parser
 # github.com/davecgh/go-spew v1.1.1
 ## explicit
 github.com/davecgh/go-spew/spew
-# github.com/gomarkdown/markdown v0.0.0-20201109183857-6ac05fb9e0a4
+# github.com/gomarkdown/markdown v0.0.0-20201113031856-722100d81a8e
 ## explicit
 github.com/gomarkdown/markdown
 github.com/gomarkdown/markdown/ast
