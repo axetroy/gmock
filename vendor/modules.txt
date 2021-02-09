@@ -3,7 +3,7 @@
 github.com/axetroy/mocker
 # github.com/aymerick/douceur v0.2.0
 github.com/aymerick/douceur/css
-# github.com/bxcodec/faker/v3 v3.5.0
+# github.com/bxcodec/faker/v3 v3.6.0
 ## explicit
 github.com/bxcodec/faker/v3
 github.com/bxcodec/faker/v3/support/slice

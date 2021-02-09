@@ -30,6 +30,8 @@ var (
 	randomSize = 100
 	// Sets the single fake data generator to generate unique values
 	generateUniqueValues = false
+	// Sets whether interface{}s should be ignored.
+	ignoreInterface = false
 	// Unique values are kept in memory so the generator retries if the value already exists
 	uniqueValues = map[string][]interface{}{}
 	// Lang is selected language for random string generator
@@ -78,6 +80,7 @@ const (
 	IPV4Tag               = "ipv4"
 	IPV6Tag               = "ipv6"
 	PASSWORD              = "password"
+	JWT                   = "jwt"
 	LATITUDE              = "lat"
 	LONGITUDE             = "long"
 	CreditCardNumber      = "cc_number"
@@ -133,6 +136,7 @@ var defaultTag = map[string]string{
 	IPV4Tag:               IPV4Tag,
 	IPV6Tag:               IPV6Tag,
 	PASSWORD:              PASSWORD,
+	JWT:                   JWT,
 	CreditCardType:        CreditCardType,
 	CreditCardNumber:      CreditCardNumber,
 	LATITUDE:              LATITUDE,
@@ -182,6 +186,7 @@ var mapperTag = map[string]TaggedFunction{
 	IPV4Tag:               GetNetworker().IPv4,
 	IPV6Tag:               GetNetworker().IPv6,
 	PASSWORD:              GetNetworker().Password,
+	JWT:                   GetNetworker().Jwt,
 	CreditCardType:        GetPayment().CreditCardType,
 	CreditCardNumber:      GetPayment().CreditCardNumber,
 	LATITUDE:              GetAddress().Latitude,
@@ -224,6 +229,7 @@ var mapperTag = map[string]TaggedFunction{
 // 		ErrValueNotPtr: Error when value is not pointer
 // 		ErrTagNotSupported: Error when tag is not supported
 // 		ErrTagAlreadyExists: Error when tag exists and call AddProvider
+// 		ErrTagDoesNotExist: Error when tag does not exist and call RemoveProvider
 // 		ErrMoreArguments: Error on passing more arguments
 // 		ErrNotSupportedPointer: Error when passing unsupported pointer
 var (
@@ -232,6 +238,7 @@ var (
 	ErrValueNotPtr         = "Not a pointer value"
 	ErrTagNotSupported     = "Tag unsupported: %s"
 	ErrTagAlreadyExists    = "Tag exists"
+	ErrTagDoesNotExist     = "Tag does not exist"
 	ErrMoreArguments       = "Passed more arguments than is possible : (%d)"
 	ErrNotSupportedPointer = "Use sample:=new(%s)\n faker.FakeData(sample) instead"
 	ErrSmallerThanZero     = "Size:%d is smaller than zero."
@@ -271,6 +278,11 @@ func ResetUnique() {
 // SetGenerateUniqueValues allows to set the single fake data generator functions to generate unique data.
 func SetGenerateUniqueValues(unique bool) {
 	generateUniqueValues = unique
+}
+
+// SetIgnoreInterface allows to set a flag to ignore found interface{}s.
+func SetIgnoreInterface(ignore bool) {
+	ignoreInterface = ignore
 }
 
 // SetNilIfLenIsZero allows to set nil for the slice and maps, if size is 0.
@@ -388,9 +400,23 @@ func AddProvider(tag string, provider TaggedFunction) error {
 	return nil
 }
 
+// RemoveProvider removes existing customization added with AddProvider
+func RemoveProvider(tag string) error {
+	if _, ok := mapperTag[tag]; !ok {
+		return errors.New(ErrTagDoesNotExist)
+	}
+
+	delete(mapperTag, tag)
+
+	return nil
+}
+
 func getValue(a interface{}) (reflect.Value, error) {
 	t := reflect.TypeOf(a)
 	if t == nil {
+		if ignoreInterface {
+			return reflect.New(reflect.TypeOf(reflect.Struct)), nil
+		}
 		return reflect.Value{}, fmt.Errorf("interface{} not allowed")
 	}
 	k := t.Kind()
@@ -1082,12 +1108,16 @@ func randomString(n int, lang *langRuneBoundary) (string, error) {
 
 // randomIntegerWithBoundary returns a random integer between input start and end boundary. [start, end)
 func randomIntegerWithBoundary(boundary numberBoundary) int {
-	return rand.Intn(boundary.end-boundary.start) + boundary.start
+	span := boundary.end - boundary.start
+	if span <= 0 {
+		return boundary.start
+	}
+	return rand.Intn(span) + boundary.start
 }
 
 // randomInteger returns a random integer between start and end boundary. [start, end)
 func randomInteger() int {
-	return rand.Intn(nBoundary.end-nBoundary.start) + nBoundary.start
+	return randomIntegerWithBoundary(nBoundary)
 }
 
 // randomSliceAndMapSize returns a random integer between [0,randomSliceAndMapSize). If the testRandZero is set, returns 0
