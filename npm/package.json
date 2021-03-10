@@ -7,6 +7,9 @@
     "download": "8.0.0",
     "progress": "2.0.3"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "description": "a linter for file system",
   "files": [
     "README.md",
