@@ -8,7 +8,6 @@ jobs:
     timeout-minutes: 10
     strategy:
       matrix:
-        kind: ['build', 'test']
         go: ['^1.16.0']
         os: [ubuntu-latest, windows-latest, macos-latest]
     name: Go ${{ matrix.go }} ${{ matrix.kind }} in ${{ matrix.os }}
@@ -26,15 +25,13 @@ jobs:
           go env
 
       - name: Format
-        if: matrix.kind == 'test'
         run: make format
 
       - name: Test
-        if: matrix.kind == 'test'
         run: make test
 
       - name: Coverage
-        if: matrix.kind == 'test' && runner.os == 'macOS' && github.repository == 'axetroy/gmock'
+        if: runner.os == 'macOS' && github.repository == 'axetroy/gmock'
         env:
           COVERALLS_TOKEN: ${{ secrets.COVERALLS_TOKEN }}
         run: |
@@ -43,7 +40,6 @@ jobs:
           $(go env GOPATH)/bin/goveralls -coverprofile=coverage.out -service="GitHub Action" -jobid="${{ github.run_id }}" -jobnumber="${{ github.run_number }}" -reponame="${{ github.repository }}"
 
       - name: Build
-        if: matrix.kind == 'build'
         uses: goreleaser/goreleaser-action@v2
         with:
           version: latest
