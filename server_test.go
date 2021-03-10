@@ -5,7 +5,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
-	"path"
+	path "path/filepath"
 	"testing"
 
 	"github.com/axetroy/gmock"

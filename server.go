@@ -6,7 +6,7 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"path"
+	path "path/filepath"
 	"reflect"
 	"strings"
 	"time"

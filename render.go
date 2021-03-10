@@ -9,7 +9,7 @@ import (
 	"mime"
 	"net/http"
 	"os"
-	"path"
+	path "path/filepath"
 	"regexp"
 	"strings"
 	"text/template"

@@ -4,7 +4,7 @@ import (
 	"io/ioutil"
 	"net/url"
 	"os"
-	"path"
+	path "path/filepath"
 	"regexp"
 	"strings"
 )

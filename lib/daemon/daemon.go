@@ -6,8 +6,7 @@ import (
 	"log"
 	"os"
 	"os/exec"
-	"path"
-	"path/filepath"
+	path "path/filepath"
 )
 
 type Action func() error
@@ -43,7 +42,7 @@ func Start(action Action, shouldRunInDaemon bool) error {
 		}
 
 		// 将命令行参数中执行文件路径转换成可用路径
-		filePath, _ := filepath.Abs(os.Args[0])
+		filePath, _ := path.Abs(os.Args[0])
 		cmd := exec.Command(filePath, os.Args[1:]...)
 		// 将其他命令传入生成出的进程
 		// cmd.Stdin = os.Stdin // 给新进程设置文件描述符，可以重定向到文件中
