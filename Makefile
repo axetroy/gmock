@@ -1,10 +1,17 @@
-# Makefile for build Go Mocker
+.PHONY: build test lint format
+
+.DEFAULT:
+build: test
+	@goreleaser release --snapshot --rm-dist --skip-publish
 
 test:
-	go test -v --cover -covermode=count -coverprofile=coverage.out ./...
+	@go test -mod=vendor --cover -covermode=count -coverprofile=coverage.out ./...
 
-start:
-	GO111MODULE=on go run ./cmd/gmock/main.go start
+lint:
+	@golangci-lint run ./... -v
 
-build:
-	bash build.sh
+.ONESHELL:
+format:
+	@gofmt -l -e **/*.go
+	@gofmt -l -e *.go
+	@go fmt -mod=vendor ./...
