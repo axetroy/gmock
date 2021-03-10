@@ -9,7 +9,7 @@ jobs:
     strategy:
       matrix:
         kind: ['build', 'test']
-        go: ['^1.15.2']
+        go: ['^1.16.0']
         os: [ubuntu-latest, windows-latest, macos-latest]
     name: Go ${{ matrix.go }} ${{ matrix.kind }} in ${{ matrix.os }}
 
@@ -24,6 +24,10 @@ jobs:
         run: |
           go version
           go env
+
+      - name: Format
+        if: matrix.kind == 'test'
+        run: make format
 
       - name: Test
         if: matrix.kind == 'test'
@@ -40,13 +44,10 @@ jobs:
 
       - name: Build
         if: matrix.kind == 'build'
-        run: make build
-
-      - uses: actions/upload-artifact@v2
-        if: runner.os == 'macOS'
+        uses: goreleaser/goreleaser-action@v2
         with:
-          name: release
-          path: ./bin
+          version: latest
+          args: release --rm-dist --skip-publish --skip-validate
 
   release:
     name: Release to Github
@@ -54,17 +55,42 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/download-artifact@v2
+      - uses: actions/checkout@v2
         with:
-          name: release
-          path: ./bin
+          fetch-depth: 0
 
-      - uses: softprops/action-gh-release@v1
+      - uses: actions/setup-go@v2
+        with:
+          go-version: "^1.16.0"
+
+      - uses: axetroy/setup-whatchanged@v1
+        with:
+          version: v0.3.5
+
+      - name: Generate release.md
+        run: |
+          whatchanged --tpl=release.tpl --output=release.md
+          cat release.md
+
+      - name: Release to Github
+        uses: goreleaser/goreleaser-action@v2
+        with:
+          version: latest
+          args: release --rm-dist --release-notes=./release.md
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+
+      - name: Prepare publish
+        env:
+          GITHUB_REF: ${{ github.ref }}
+        run: |
+          cp README.md ./npm/README.md
+          cp release.md ./npm/CHANGELOG.md
+          cp LICENSE ./npm/LICENSE
+          node ./npm/scripts/bump.js
+
+      - name: Publish to NPM
+        uses: JS-DevTools/npm-publish@v1
         with:
-          files: |
-            bin/gmock_darwin_amd64.tar.gz
-            bin/gmock_linux_amd64.tar.gz
-            bin/gmock_windows_amd64.tar.gz
-          draft: false
+          package: ./npm/package.json
+          token: ${{ secrets.NPM_TOKEN }}

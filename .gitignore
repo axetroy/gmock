@@ -19,3 +19,6 @@
 .idea
 bin
 *.pid
+node_modules
+npm/.DS_Store
+release.md

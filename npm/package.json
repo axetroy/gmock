@@ -1,0 +1,27 @@
+{
+  "author": "Axetroy",
+  "bin": {
+    "gmock": "./bin/gmock"
+  },
+  "dependencies": {
+    "download": "8.0.0",
+    "progress": "2.0.3"
+  },
+  "description": "a linter for file system",
+  "files": [
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE",
+    "bin/gmock",
+    "scripts/postinstall.js",
+    "download/.gitkeep"
+  ],
+  "license": "Anti-996",
+  "name": "@axetroy/gmock",
+  "private": false,
+  "scripts": {
+    "postinstall": "node --unhandled-rejections=strict scripts/postinstall.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "version": "0.0.0"
+}

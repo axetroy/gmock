@@ -1,0 +1,7 @@
+node_modules
+*.lock
+package-lock.json
+dist
+gmock
+gmock.exe
+scripts/bump.js
