@@ -1,4 +1,2 @@
-./bin/gmock
-./bin/gmock.exe
 *-lock.json
 *.lock
