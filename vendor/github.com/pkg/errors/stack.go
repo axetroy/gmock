@@ -3,7 +3,7 @@ package errors
 import (
 	"fmt"
 	"io"
-	path "path/filepath"
+	"path"
 	"runtime"
 	"strconv"
 	"strings"

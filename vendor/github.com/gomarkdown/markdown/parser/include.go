@@ -2,7 +2,8 @@ package parser
 
 import (
 	"bytes"
-	path "path/filepath"
+	"path"
+	"path/filepath"
 )
 
 // isInclude parses {{...}}[...], that contains a path between the {{, the [...] syntax contains
@@ -109,7 +110,7 @@ func (i *incStack) Push(new string) {
 	if len(i.stack) > 0 {
 		last = i.stack[len(i.stack)-1]
 	}
-	i.stack = append(i.stack, path.Dir(path.Join(last, new)))
+	i.stack = append(i.stack, path.Dir(filepath.Join(last, new)))
 }
 
 // Pop pops the last value.
