@@ -3,12 +3,11 @@
 github.com/axetroy/mocker
 # github.com/aymerick/douceur v0.2.0
 github.com/aymerick/douceur/css
+github.com/aymerick/douceur/parser
 # github.com/bxcodec/faker/v3 v3.6.0
 ## explicit
 github.com/bxcodec/faker/v3
 github.com/bxcodec/faker/v3/support/slice
-# github.com/chris-ramon/douceur v0.2.0
-github.com/chris-ramon/douceur/parser
 # github.com/davecgh/go-spew v1.1.1
 ## explicit
 github.com/davecgh/go-spew/spew
@@ -20,7 +19,7 @@ github.com/gomarkdown/markdown/html
 github.com/gomarkdown/markdown/parser
 # github.com/gorilla/css v1.0.0
 github.com/gorilla/css/scanner
-# github.com/microcosm-cc/bluemonday v1.0.5
+# github.com/microcosm-cc/bluemonday v1.0.6
 ## explicit
 github.com/microcosm-cc/bluemonday
 # github.com/pkg/errors v0.9.1
@@ -31,7 +30,7 @@ github.com/pmezard/go-difflib/difflib
 # github.com/stretchr/testify v1.7.0
 ## explicit
 github.com/stretchr/testify/assert
-# golang.org/x/net v0.0.0-20181220203305-927f97764cc3
+# golang.org/x/net v0.0.0-20210331212208-0fccb6fa2b5c
 golang.org/x/net/html
 golang.org/x/net/html/atom
 # gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c
