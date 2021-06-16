@@ -47,6 +47,7 @@ var (
 	dataAttributeXMLPrefix    = regexp.MustCompile("^xml.+")
 	dataAttributeInvalidChars = regexp.MustCompile("[A-Z;]+")
 	cssUnicodeChar            = regexp.MustCompile(`\\[0-9a-f]{1,6} ?`)
+	dataURIbase64Prefix       = regexp.MustCompile(`^data:[^,]*;base64,`)
 )
 
 // Sanitize takes a string that contains a HTML fragment or document and applies
@@ -289,6 +290,10 @@ func (p *Policy) sanitize(r io.Reader) *bytes.Buffer {
 		case html.CommentToken:
 
 			// Comments are ignored by default
+			if p.allowComments {
+				// But if allowed then write the comment out as-is
+				buff.WriteString(token.String())
+			}
 
 		case html.StartTagToken:
 
@@ -533,7 +538,7 @@ func (p *Policy) sanitizeAttrs(
 			tmpAttrs := []html.Attribute{}
 			for _, htmlAttr := range cleanAttrs {
 				switch elementName {
-				case "a", "area", "link":
+				case "a", "area", "base", "link":
 					if htmlAttr.Key == "href" {
 						if u, ok := p.validURL(htmlAttr.Val); ok {
 							htmlAttr.Val = u
@@ -542,7 +547,7 @@ func (p *Policy) sanitizeAttrs(
 						break
 					}
 					tmpAttrs = append(tmpAttrs, htmlAttr)
-				case "blockquote", "q":
+				case "blockquote", "del", "ins", "q":
 					if htmlAttr.Key == "cite" {
 						if u, ok := p.validURL(htmlAttr.Val); ok {
 							htmlAttr.Val = u
@@ -551,7 +556,7 @@ func (p *Policy) sanitizeAttrs(
 						break
 					}
 					tmpAttrs = append(tmpAttrs, htmlAttr)
-				case "img", "script":
+				case "audio", "embed", "iframe", "img", "script", "source", "track", "video":
 					if htmlAttr.Key == "src" {
 						if u, ok := p.validURL(htmlAttr.Val); ok {
 							htmlAttr.Val = u
@@ -576,7 +581,7 @@ func (p *Policy) sanitizeAttrs(
 
 			// Add rel="nofollow" if a "href" exists
 			switch elementName {
-			case "a", "area", "link":
+			case "a", "area", "base", "link":
 				var hrefFound bool
 				var externalLink bool
 				for _, htmlAttr := range cleanAttrs {
@@ -848,11 +853,28 @@ func (p *Policy) validURL(rawurl string) (string, bool) {
 		rawurl = strings.TrimSpace(rawurl)
 
 		// URLs cannot contain whitespace, unless it is a data-uri
-		if (strings.Contains(rawurl, " ") ||
+		if strings.Contains(rawurl, " ") ||
 			strings.Contains(rawurl, "\t") ||
-			strings.Contains(rawurl, "\n")) &&
-			!strings.HasPrefix(rawurl, `data:`) {
-			return "", false
+			strings.Contains(rawurl, "\n") {
+			if !strings.HasPrefix(rawurl, `data:`) {
+				return "", false
+			}
+
+			// Remove \r and \n from base64 encoded data to pass url.Parse.
+			matched := dataURIbase64Prefix.FindString(rawurl)
+			if matched != "" {
+				rawurl = matched + strings.Replace(
+					strings.Replace(
+						rawurl[len(matched):],
+						"\r",
+						"",
+						-1,
+					),
+					"\n",
+					"",
+					-1,
+				)
+			}
 		}
 
 		// URLs are valid if they parse
@@ -866,7 +888,6 @@ func (p *Policy) validURL(rawurl string) (string, bool) {
 			urlPolicy, ok := p.allowURLSchemes[u.Scheme]
 			if !ok {
 				return "", false
-
 			}
 
 			if urlPolicy == nil || urlPolicy(u) == true {
@@ -890,7 +911,14 @@ func (p *Policy) validURL(rawurl string) (string, bool) {
 
 func linkable(elementName string) bool {
 	switch elementName {
-	case "a", "area", "blockquote", "img", "link", "script":
+	case "a", "area", "base", "link":
+		// elements that allow .href
+		return true
+	case "blockquote", "del", "ins", "q":
+		// elements that allow .cite
+		return true
+	case "audio", "embed", "iframe", "img", "input", "script", "track", "video":
+		// elements that allow .src
 		return true
 	default:
 		return false

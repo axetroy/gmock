@@ -19,9 +19,10 @@ github.com/gomarkdown/markdown/html
 github.com/gomarkdown/markdown/parser
 # github.com/gorilla/css v1.0.0
 github.com/gorilla/css/scanner
-# github.com/microcosm-cc/bluemonday v1.0.9
+# github.com/microcosm-cc/bluemonday v1.0.12
 ## explicit
 github.com/microcosm-cc/bluemonday
+github.com/microcosm-cc/bluemonday/css
 # github.com/pkg/errors v0.9.1
 ## explicit
 github.com/pkg/errors
@@ -30,7 +31,7 @@ github.com/pmezard/go-difflib/difflib
 # github.com/stretchr/testify v1.7.0
 ## explicit
 github.com/stretchr/testify/assert
-# golang.org/x/net v0.0.0-20210421230115-4e50805a0758
+# golang.org/x/net v0.0.0-20210610132358-84b48f89b13b
 golang.org/x/net/html
 golang.org/x/net/html/atom
 # gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c
