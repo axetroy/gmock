@@ -19,7 +19,7 @@ github.com/gomarkdown/markdown/html
 github.com/gomarkdown/markdown/parser
 # github.com/gorilla/css v1.0.0
 github.com/gorilla/css/scanner
-# github.com/microcosm-cc/bluemonday v1.0.12
+# github.com/microcosm-cc/bluemonday v1.0.14
 ## explicit
 github.com/microcosm-cc/bluemonday
 github.com/microcosm-cc/bluemonday/css
