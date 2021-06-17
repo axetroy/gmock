@@ -40,6 +40,8 @@ github.com/microcosm-cc/bluemonday v1.0.9 h1:dpCwruVKoyrULicJwhuY76jB+nIxRVKv/e2
 github.com/microcosm-cc/bluemonday v1.0.9/go.mod h1:B2riunDr9benLHghZB7hjIgdwSUzzs0pjCxFrWYEZFU=
 github.com/microcosm-cc/bluemonday v1.0.12 h1:+KMS8XDHgl1UavNfsYZ2NeM0IcJAe6Ed92SxZtRsR6g=
 github.com/microcosm-cc/bluemonday v1.0.12/go.mod h1:beubO5lmWoy1tU8niaMyXNriNgROO37H3U/tsrcZsy0=
+github.com/microcosm-cc/bluemonday v1.0.14 h1:Djd+GeTanVeA23todvVC0AO5hsI+vAwQMLTy794Zr5I=
+github.com/microcosm-cc/bluemonday v1.0.14/go.mod h1:beubO5lmWoy1tU8niaMyXNriNgROO37H3U/tsrcZsy0=
 github.com/pkg/errors v0.9.1 h1:FEBLx1zS214owpjy7qsBeixbURkuhQAwrK5UwLGTwt4=
 github.com/pkg/errors v0.9.1/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
