@@ -11,7 +11,7 @@ github.com/bxcodec/faker/v3/support/slice
 # github.com/davecgh/go-spew v1.1.1
 ## explicit
 github.com/davecgh/go-spew/spew
-# github.com/gomarkdown/markdown v0.0.0-20210914093620-23ec7da3bafc
+# github.com/gomarkdown/markdown v0.0.0-20210915013955-e7bd4c1655ed
 ## explicit
 github.com/gomarkdown/markdown
 github.com/gomarkdown/markdown/ast
