@@ -33,6 +33,8 @@ github.com/gomarkdown/markdown v0.0.0-20210915013955-e7bd4c1655ed h1:/gfTboYPGuT
 github.com/gomarkdown/markdown v0.0.0-20210915013955-e7bd4c1655ed/go.mod h1:aii0r/K0ZnHv7G0KF7xy1v0A7s2Ljrb5byB7MO5p6TU=
 github.com/gomarkdown/markdown v0.0.0-20210915020410-2399b65079f5 h1:kXS2YlNKITOZExOnv5jMEyAij9+Dxx97pGmkIzitxc0=
 github.com/gomarkdown/markdown v0.0.0-20210915020410-2399b65079f5/go.mod h1:JDGcbDT52eL4fju3sZ4TeHGsQwhG9nbDV21aMyhwPoA=
+github.com/gomarkdown/markdown v0.0.0-20210915032930-fe0e174ee09a h1:zZJ3Nd5dwjs9sy9rBvNfUrnhTgH9ps6hDZvyDLrGJsE=
+github.com/gomarkdown/markdown v0.0.0-20210915032930-fe0e174ee09a/go.mod h1:JDGcbDT52eL4fju3sZ4TeHGsQwhG9nbDV21aMyhwPoA=
 github.com/gorilla/css v1.0.0 h1:BQqNyPTi50JCFMTw/b67hByjMVXZRwGha6wxVGkeihY=
 github.com/gorilla/css v1.0.0/go.mod h1:Dn721qIggHpt4+EFCcTLTU/vk5ySda2ReITrtgBl60c=
 github.com/microcosm-cc/bluemonday v1.0.4 h1:p0L+CTpo/PLFdkoPcJemLXG+fpMD7pYOoDEq1axMbGg=
