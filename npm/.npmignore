@@ -1,7 +1,0 @@
-node_modules
-*.lock
-package-lock.json
-dist
-download/gmock
-download/gmock.exe
-scripts/bump.js
