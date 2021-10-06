@@ -131,6 +131,12 @@ maybeUnsafeHTML := markdown.ToHTML(md, nil, nil)
 html := bluemonday.UGCPolicy().SanitizeBytes(maybeUnsafeHTML)
 ```
 
+## Windows / Mac newlines
+
+The library only supports Unix newlines. If you have markdown text with possibly
+Windows / Mac newlines, normalize newlines before caling this librar using
+`d = markdown.NormalizeNewlines(d)`
+
 ## mdtohtml command-line tool
 
 https://github.com/gomarkdown/mdtohtml is a command-line markdown to html
