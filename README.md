@@ -72,22 +72,6 @@ tong
 
 ## [文档](https://axetroy.github.io/gmock)
 
-## 从源码中构建
-
-确保你已安装 `Golang@v1.14.2` 或者更高版本.
-
-```shell
-$ git clone https://github.com/axetroy/gmock.git $GOPATH/src/github.com/axetroy/gmock
-$ cd $GOPATH/src/github.com/axetroy/gmock
-$ make build
-```
-
-## 测试
-
-```bash
-$ make test
-```
-
 ## 开源许可
 
 The [MIT License](LICENSE)
