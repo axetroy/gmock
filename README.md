@@ -22,22 +22,29 @@
 - [x] 支持文件流，例如返回图片，下载等
 - [x] 支持渲染 HTML/Markdown 文件
 
-### 安装
+## 安装
 
-### Unix
+1. Shell (Mac/Linux)
 
-如果你使用 `Linux` 或 `macOS`， 你可以输入以下命令安装:
-
-```shell
-# 安装最新版本
-curl -fsSL https://raw.githubusercontent.com/axetroy/gmock/master/install.sh | bash
-# 安装指定的版本
-curl -fsSL https://raw.githubusercontent.com/axetroy/gmock/master/install.sh | bash -s v0.5.0
+```bash
+curl -fsSL https://github.com/release-lab/install/raw/v1/install.sh | bash -s -- -r=axetroy/gmock
 ```
 
-### Windows
+2. PowerShell (Windows):
 
-从 [Github Release](https://github.com/axetroy/gmock/releases) 页面下载文件
+```powershell
+$r="axetroy/gmock";iwr https://github.com/release-lab/install/raw/v1/install.ps1 -useb | iex
+```
+
+3. 从 [Github Release Page](https://github.com/axetroy/gmock/releases) 下载 (全平台支持)
+
+> 下载可执行文件，并且把它加入到`$PATH` 环境变量中
+
+4. 使用 [Golang](https://golang.org) 从源码中构建并安装 (全平台支持)
+
+```bash
+go install github.com/axetroy/gmock/cmd/whatchanged@latest
+```
 
 ## 快速开始
 
